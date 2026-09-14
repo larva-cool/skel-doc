@@ -1,0 +1,46 @@
+/**
+ * Laravel 风格主题定制
+ * 参考 https://www.laravel.wiki
+ */
+
+:root {
+  /* 品牌色：Laravel 红 */
+  --vp-c-brand-1: #ff2d20;
+  --vp-c-brand-2: #ff5545;
+  --vp-c-brand-3: #d62418;
+  --vp-c-brand-soft: rgba(255, 45, 32, 0.14);
+
+  --vp-c-brand-light: #ff5545;
+  --vp-c-brand-lighter: #ff8a80;
+  --vp-c-brand-dark: #d62418;
+  --vp-c-brand-darker: #b31e13;
+
+  /* 字体 */
+  --vp-font-family-base: 'Inter', 'PingFang SC', 'Microsoft YaHei', -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --vp-font-family-mono: 'JetBrains Mono', 'SFMono-Regular', 'SF Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
+
+  /* 首页标题渐变 */
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(120deg, #ff2d20 20%, #ff5545 60%, #ff8a80);
+}
+
+/* 深色模式下品牌色微调 */
+.dark {
+  --vp-c-brand-1: #ff5545;
+  --vp-c-brand-2: #ff2d20;
+  --vp-c-brand-3: #ff8a80;
+  --vp-c-brand-soft: rgba(255, 85, 69, 0.16);
+}
+
+/* 内容区一级标题 */
+.vp-doc h1 {
+  letter-spacing: -0.02em;
+}
+
+/* 自定义容器与代码块圆角，贴近 Laravel 风格 */
+.vp-doc .custom-block,
+.vp-doc div[class*='language-'] {
+  border-radius: 8px;
+}

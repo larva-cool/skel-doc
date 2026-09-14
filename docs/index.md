@@ -3,23 +3,25 @@
 layout: home
 
 hero:
-  name: "My Awesome Project"
-  text: "A VitePress Site"
-  tagline: My great project tagline
+  name: "Laravel 文档"
+  text: "面向工匠与智能体的简洁技术栈"
+  tagline: 功能齐全，人人都能以惊人的速度构建并交付 Web 应用
   actions:
     - theme: brand
-      text: Markdown Examples
+      text: 快速开始
       link: /markdown-examples
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: GitHub
+      link: https://github.com/
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - icon: ⚡
+    title: 快速开始
+    details: 简洁的安装与配置流程，助你快速上手。
+  - icon: 🛠️
+    title: 工程化
+    details: 遵循最佳实践，开箱即用的工程化约定。
+  - icon: 📚
+    title: 完整文档
+    details: 覆盖常用场景的完整文档与示例。
 ---
-

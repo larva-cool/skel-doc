@@ -2,3 +2,6 @@
 .DS_Store
 .idea
 node_modules
+default.profraw
+.vitepress/cache/
+.vitepress/dist/
