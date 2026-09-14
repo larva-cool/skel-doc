@@ -1,17 +1,30 @@
 {
-  "name": "doc",
+  "name": "laravel-skel-docs",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Laravel Skel Forge 项目文档站（基于 VitePress）",
+  "type": "module",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "laravel",
+    "vitepress",
+    "docs",
+    "documentation",
+    "ddd"
+  ],
+  "author": "Tongle Xu <xutongle@msn.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.8.0"
+  },
   "devDependencies": {
     "vitepress": "2.0.0-alpha.20"
   }
