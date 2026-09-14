@@ -4,8 +4,8 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   srcDir: 'docs',
   lang: 'zh-CN',
-  title: 'Laravel 文档',
-  description: 'Laravel 开发文档',
+  title: 'Laravel Skel Forge',
+  description: 'Laravel 13.x 企业级 API 骨架项目文档',
   lastUpdated: true,
   cleanUrls: true,
 
@@ -38,20 +38,77 @@ export default defineConfig({
 
     nav: [
       { text: '首页', link: '/' },
-      { text: 'Markdown 示例', link: '/markdown-examples' },
-      { text: 'API 示例', link: '/api-examples' }
+      { text: '项目概述', link: '/overview/project-overview' },
+      { text: '功能需求', link: '/features/user-system' },
+      { text: '技术架构', link: '/architecture/tech-stack' },
+      { text: 'API 接口', link: '/api/response-format' },
+      { text: '技术方案', link: '/technical-solutions/attachment-management' },
+      { text: '运维与开发', link: '/operations/development-guide' },
+      { text: '路线图', link: '/roadmap/roadmap' }
     ],
 
     sidebar: [
       {
-        text: '开始',
-        items: [{ text: '首页', link: '/' }]
+        text: '项目概述',
+        items: [{ text: '项目概述与产品定位', link: '/overview/project-overview' }]
       },
       {
-        text: '示例',
+        text: '功能需求',
         items: [
-          { text: 'Markdown 示例', link: '/markdown-examples' },
-          { text: 'API 示例', link: '/api-examples' }
+          { text: '用户系统', link: '/features/user-system' },
+          { text: '认证与授权', link: '/features/auth-and-permission' },
+          { text: '后台管理系统', link: '/features/admin-system' },
+          { text: 'AI 助手', link: '/features/ai-assistant' },
+          { text: '核心服务', link: '/features/core-services' }
+        ]
+      },
+      {
+        text: '技术架构',
+        items: [
+          { text: '技术栈', link: '/architecture/tech-stack' },
+          { text: '项目结构', link: '/architecture/project-structure' },
+          { text: '架构设计', link: '/architecture/architecture-design' }
+        ]
+      },
+      {
+        text: '数据模型',
+        items: [
+          { text: '核心数据表', link: '/database/core-tables' },
+          { text: '业务数据表', link: '/database/business-tables' }
+        ]
+      },
+      {
+        text: 'API 接口',
+        items: [
+          { text: '响应格式与状态码', link: '/api/response-format' },
+          { text: '后台管理接口', link: '/api/admin-api' },
+          { text: '前台 API v1 接口', link: '/api/api-v1' }
+        ]
+      },
+      {
+        text: '技术方案',
+        items: [
+          { text: '附件管理', link: '/technical-solutions/attachment-management' },
+          { text: '邀请', link: '/technical-solutions/invitation' },
+          { text: '用户任务', link: '/technical-solutions/user-tasks' },
+          { text: '钱包', link: '/technical-solutions/wallet' }
+        ]
+      },
+      {
+        text: '运维与开发',
+        items: [
+          { text: '非功能性需求', link: '/operations/non-functional-requirements' },
+          { text: '开发流程指南', link: '/operations/development-guide' },
+          { text: '部署方案', link: '/operations/deployment' },
+          { text: '监控与维护', link: '/operations/monitoring' },
+          { text: '定时任务', link: '/operations/scheduled-tasks' }
+        ]
+      },
+      {
+        text: '路线图与附录',
+        items: [
+          { text: 'Roadmap 路线图', link: '/roadmap/roadmap' },
+          { text: '附录', link: '/roadmap/appendix' }
         ]
       }
     ],

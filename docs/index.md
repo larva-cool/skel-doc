@@ -3,25 +3,34 @@
 layout: home
 
 hero:
-  name: "Laravel 文档"
-  text: "面向工匠与智能体的简洁技术栈"
-  tagline: 功能齐全，人人都能以惊人的速度构建并交付 Web 应用
+  name: "Laravel Skel Forge"
+  text: "企业级 API 骨架项目"
+  tagline: 基于 Laravel 13.x + DDD 架构，内置完整的管理员/用户双端认证、RBAC 权限管理、后台管理系统与 AI 助手能力
   actions:
     - theme: brand
       text: 快速开始
-      link: /markdown-examples
+      link: /operations/development-guide
     - theme: alt
-      text: GitHub
-      link: https://github.com/
+      text: 项目概述
+      link: /overview/project-overview
 
 features:
+  - icon: 🚀
+    title: 快速启动
+    details: 一键安装和配置，开箱即用的企业级 API 开发模板。
+  - icon: 🛡️
+    title: 安全可靠
+    details: 完整的认证与授权方案，双 Guard 隔离的管理员/用户系统。
+  - icon: 🧩
+    title: 架构清晰
+    details: DDD 分层架构，模块化设计，代码组织规范、易于扩展。
+  - icon: 🤖
+    title: AI 助手
+    details: 集成 AI Agent 能力，SSE 流式对话、工具调用与审批。
+  - icon: 📊
+    title: 运维完善
+    details: 内置监控、队列、定时任务与调度日志体系。
   - icon: ⚡
-    title: 快速开始
-    details: 简洁的安装与配置流程，助你快速上手。
-  - icon: 🛠️
-    title: 工程化
-    details: 遵循最佳实践，开箱即用的工程化约定。
-  - icon: 📚
-    title: 完整文档
-    details: 覆盖常用场景的完整文档与示例。
+    title: 实时通信
+    details: Laravel Reverb + Echo 提供 WebSocket 能力。
 ---
