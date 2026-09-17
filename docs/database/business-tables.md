@@ -250,7 +250,52 @@
 | point_records | 积分记录 |
 | point_trades | 积分流水记录 |
 
-## 7. 系统基础表
+## 7. 实名认证表 (identity_verifications)
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| id | BIGINT | 主键 |
+| verifiable_type | VARCHAR(100) | 申请人类型（多态） |
+| verifiable_id | BIGINT | 申请人 ID |
+| type | VARCHAR(16) | 认证类型（personal 个人 / enterprise 企业） |
+| status | VARCHAR(16) | 审核状态（pending/review/approved/rejected，默认 pending） |
+| real_name | VARCHAR(64) | 真实姓名（个人认证） |
+| id_card_no | VARCHAR(32) | 身份证号（密文存储，响应隐藏） |
+| id_card_front | VARCHAR | 身份证人像面图片路径 |
+| id_card_back | VARCHAR | 身份证国徽面图片路径 |
+| handheld | VARCHAR | 手持身份证图片路径 |
+| company_name | VARCHAR(128) | 企业名称（企业认证） |
+| credit_code | VARCHAR(32) | 统一社会信用代码（18 位） |
+| legal_person_name | VARCHAR(64) | 法人姓名（企业认证） |
+| legal_person_id_card_no | VARCHAR(32) | 法人身份证号（密文存储，响应隐藏） |
+| business_license | VARCHAR | 营业执照图片路径 |
+| opening_permit | VARCHAR | 开户许可证图片路径 |
+| bank_account | VARCHAR(64) | 对公账户（响应隐藏） |
+| bank_name | VARCHAR(64) | 开户行 |
+| admin_id | BIGINT | 审核管理员 ID |
+| reject_reason | VARCHAR(32) | 驳回原因（字典 `identity_reject_reason` 的 value） |
+| reject_remark | TEXT | 驳回备注 |
+| submitted_at | TIMESTAMP | 提交时间 |
+| reviewed_at | TIMESTAMP | 审核时间 |
+| expires_at | TIMESTAMP | 认证有效期（通过后自动 +3 年） |
+| created_at / updated_at | TIMESTAMP | 时间戳 |
+
+**索引**：`(verifiable_type, verifiable_id)` 复合索引、`type` 索引、`status` 索引、`admin_id` 索引。
+
+> 敏感字段（`id_card_no`、`legal_person_id_card_no`、`bank_account`）通过模型 `#[Hidden]` 在所有响应中自动隐藏。驳回原因通过预置字典 `identity_reject_reason` 管理，迁移时自动 seed。
+
+**users 表关联字段**：
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| identity_type | VARCHAR(16) | 实名认证类型（personal/enterprise），null 表示未认证 |
+| identity_status | VARCHAR(16) | 实名认证状态（默认 unsubmitted，索引） |
+
+> 用户表直接存储认证状态热数据，查询零 Join。`identity_verified` 为逻辑属性，由 `identity_status === approved` 派生。
+
+详见 [实名认证技术方案](/technical-solutions/identity-verification)。
+
+## 8. 系统基础表
 
 | 表名 | 说明 |
 |------|------|
