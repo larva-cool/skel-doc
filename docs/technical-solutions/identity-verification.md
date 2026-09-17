@@ -14,8 +14,9 @@
 ```
 app/
 ├── Enums/
+│   ├── IdentityStatus.php                        # 实名认证状态枚举（unsubmitted/pending/approved/rejected）
 │   ├── IdentityType.php                          # 认证类型枚举（personal/enterprise）
-│   └── ReviewStatus.php                          # 审核状态枚举（unsubmitted/pending/approved/rejected；实名认证不使用 review）
+│   └── ReviewStatus.php                          # 通用审核状态枚举（含 review，评论模块使用）
 ├── Models/User/
 │   └── IdentityVerification.php                  # 认证记录模型（多态 verifiable + BelongsTo admin）
 ├── Services/
@@ -99,17 +100,16 @@ app/
 | personal | 个人认证 |
 | enterprise | 企业认证 |
 
-**ReviewStatus（审核状态）**：
+**IdentityStatus（实名认证状态）**：
 
-> `ReviewStatus` 枚举包含 5 种状态，但实名认证模块仅使用以下 4 种（不使用 `review`/需复审）：
+> 实名认证模块使用独立的 `IdentityStatus` 枚举，不复用 `ReviewStatus`（后者包含 `review` 状态，供评论模块使用）。
 
-| 值 | 说明 | 标签样式 | 实名认证使用 |
-|----|------|----------|--------------|
-| unsubmitted | 未提交 | info | ✅ 用户初始状态 |
-| pending | 待审核 | warning | ✅ 用户提交后 |
-| review | 需复审 | primary | ❌ 实名认证不使用 |
-| approved | 已通过 | success | ✅ 管理员审核通过 |
-| rejected | 已驳回 | danger | ✅ 管理员审核驳回 |
+| 值 | 说明 | 标签样式 |
+|----|------|----------|
+| unsubmitted | 未提交 | info |
+| pending | 待审核 | warning |
+| approved | 已通过 | success |
+| rejected | 已驳回 | danger |
 
 ### 3.4 驳回原因字典（identity_reject_reason）
 
