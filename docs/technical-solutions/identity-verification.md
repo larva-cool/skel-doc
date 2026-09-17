@@ -15,7 +15,7 @@
 app/
 ├── Enums/
 │   ├── IdentityType.php                          # 认证类型枚举（personal/enterprise）
-│   └── ReviewStatus.php                          # 审核状态枚举（unsubmitted/pending/review/approved/rejected）
+│   └── ReviewStatus.php                          # 审核状态枚举（unsubmitted/pending/approved/rejected；实名认证不使用 review）
 ├── Models/User/
 │   └── IdentityVerification.php                  # 认证记录模型（多态 verifiable + BelongsTo admin）
 ├── Services/
@@ -63,7 +63,7 @@ app/
 | verifiable_type | VARCHAR(100) | 申请人类型（多态，如 `App\Models\User`） |
 | verifiable_id | BIGINT | 申请人 ID |
 | type | VARCHAR(16) | 认证类型（`personal` / `enterprise`） |
-| status | VARCHAR(16) | 审核状态（`pending` / `review` / `approved` / `rejected`） |
+| status | VARCHAR(16) | 审核状态（`pending` / `approved` / `rejected`） |
 | real_name | VARCHAR(64) | 真实姓名（个人认证） |
 | id_card_no | VARCHAR(32) | 身份证号（密文存储，响应隐藏） |
 | id_card_front | VARCHAR | 身份证人像面图片路径 |
@@ -101,13 +101,15 @@ app/
 
 **ReviewStatus（审核状态）**：
 
-| 值 | 说明 | 标签样式 |
-|----|------|----------|
-| unsubmitted | 未提交 | info |
-| pending | 待审核 | warning |
-| review | 需复审 | primary |
-| approved | 已通过 | success |
-| rejected | 已驳回 | danger |
+> `ReviewStatus` 枚举包含 5 种状态，但实名认证模块仅使用以下 4 种（不使用 `review`/需复审）：
+
+| 值 | 说明 | 标签样式 | 实名认证使用 |
+|----|------|----------|--------------|
+| unsubmitted | 未提交 | info | ✅ 用户初始状态 |
+| pending | 待审核 | warning | ✅ 用户提交后 |
+| review | 需复审 | primary | ❌ 实名认证不使用 |
+| approved | 已通过 | success | ✅ 管理员审核通过 |
+| rejected | 已驳回 | danger | ✅ 管理员审核驳回 |
 
 ### 3.4 驳回原因字典（identity_reject_reason）
 
@@ -127,7 +129,7 @@ app/
 ### 4.1 用户提交认证
 
 1. 用户通过 `POST /api/v1/user/identity` 提交认证信息，`type` 指定个人或企业。
-2. 服务层在事务内加行锁检查：同一用户同时仅允许一条 `pending`/`review` 记录，否则返回 422。
+2. 服务层在事务内加行锁检查：同一用户同时仅允许一条 `pending` 记录，否则返回 422。
 3. 创建认证记录（状态 `pending`），同步用户表 `identity_status` 为 `pending`。
 4. 返回认证记录资源。
 
@@ -158,25 +160,20 @@ app/
 ### 4.4 状态流转图
 
 ```
-                    提交认证
-                       │
-                       ▼
-                  ┌─────────┐
-              ┌──│ pending  │──┐
-              │   └─────────┘  │
-         管理员要求复审        管理员审核
-              │                │
-              ▼                ▼
-         ┌─────────┐     ┌──────────┐
-         │  review │     │ approved │（终态，设置有效期）
-         └────┬────┘     └──────────┘
-              │
-         管理员审核
-         ├──────────────────┐
-         ▼                  ▼
-    ┌──────────┐      ┌──────────┐
-    │ approved │      │ rejected │（可重新提交）
-    └──────────┘      └──────────┘
+              提交认证
+                 │
+                 ▼
+            ┌─────────┐
+            │ pending  │
+            └────┬────┘
+                 │
+          管理员审核
+        ├──────────────┐
+        ▼              ▼
+  ┌──────────┐   ┌──────────┐
+  │ approved │   │ rejected │（可重新提交）
+  └──────────┘   └──────────┘
+     （终态，设置有效期）
 ```
 
 ## 5. 事件与广播
