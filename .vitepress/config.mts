@@ -9,7 +9,13 @@ export default defineConfig({
   lastUpdated: true,
   cleanUrls: true,
 
-  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }]],
+  head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
+    ['link', { rel: 'canonical', href: 'https://skel-doc.vercel.app/' }],
+    ['meta', { property: 'og:url', content: 'https://skel-doc.vercel.app/' }],
+    ['meta', { property: 'og:site_name', content: 'Laravel Skel Forge' }],
+    ['meta', { name: 'twitter:url', content: 'https://skel-doc.vercel.app/' }]
+  ],
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
