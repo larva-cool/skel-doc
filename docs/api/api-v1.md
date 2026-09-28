@@ -84,7 +84,15 @@
 | GET | `/api/v1/announcements` | 公告列表 |
 | GET | `/api/v1/announcements/{id}` | 公告详情 |
 
-## 7. Banner
+## 7. 协议
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/v1/agreements/{category}` | 按类别获取最新已发布协议（公开，带 HTTP 缓存） |
+
+> 前端传入协议类别编码（如 `user_agreement`、`privacy_policy`），返回该类别最新已发布版本的完整内容（含 title、content、version、effective_at）。
+
+## 8. Banner
 
 | 方法 | 路径 | 说明 |
 |------|------|------|

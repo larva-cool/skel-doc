@@ -497,6 +497,19 @@ SSE 流式响应通过 `text/event-stream` 逐行推送以下事件类型：
 | finished_at | string\|null | 完成时间 |
 | created_at | string | 创建时间 |
 
+## 协议管理（/admin/agreements）
+
+| 方法 | 路径 | 说明 | 权限 |
+|------|------|------|------|
+| GET | `/admin/agreements` | 协议列表（分页，支持 `keyword` 标题搜索、`category` 类别、`status` 状态筛选） | agreements.index |
+| POST | `/admin/agreements` | 创建协议 | agreements.create |
+| GET | `/admin/agreements/{id}` | 协议详情 | agreements.index |
+| PUT | `/admin/agreements/{id}` | 更新协议 | agreements.edit |
+| PUT | `/admin/agreements/{id}/toggle-status` | 切换状态（草稿→已发布→已归档） | agreements.edit |
+| DELETE | `/admin/agreements/{id}` | 删除协议（软删除） | agreements.delete |
+
+> 协议类别（`category`）使用字典管理，字典编码为 `agreement_category`，字典项的 `value` 即为协议类别编码。前台公开接口 `GET /api/v1/agreements/{category}` 按类别返回最新已发布版本。状态流转：`draft` →（toggle）`published`（自动写入 `effective_at`）→（toggle）`archived` →（toggle）`published`。
+
 ---
 
 > 文档来源：PRD 第 6.3 节
