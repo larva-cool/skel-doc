@@ -461,7 +461,9 @@ SSE 流式响应通过 `text/event-stream` 逐行推送以下事件类型：
 }
 ```
 
-规则字段（10 个）：`status`、`identity_status`、`identity_type`、`vip_expires_at`、`last_login_at`、`last_active_at`、`created_at`、`available_points`、`available_coins`、`login_count`。
+规则字段（12 个）：`status`、`gender`、`birthday`、`identity_status`、`identity_type`、`vip_expires_at`、`last_login_at`、`last_active_at`、`created_at`、`available_points`、`available_coins`、`login_count`。
+
+> `gender`（性别：0=保密/1=男/2=女）和 `birthday`（生日）字段位于 `user_profiles` 表，通过 `profile` 关联查询，其余字段位于 `users` 主表。
 
 操作符（11 种）：`=`、`!=`、`>`、`>=`、`<`、`<=`、`between`、`in`、`not_in`、`is_null`、`is_not_null`。
 
