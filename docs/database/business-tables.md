@@ -295,7 +295,66 @@
 
 详见 [实名认证技术方案](/technical-solutions/identity-verification)。
 
-## 8. 系统基础表
+## 8. 用户分群表
+
+### 8.1 分群定义表 (user_segments)
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| id | BIGINT | 主键（从 10000000 起） |
+| code | VARCHAR(64) | 分群编码（规则分群必填且唯一，手动可空） |
+| name | VARCHAR(64) | 分群名称 |
+| label_type | VARCHAR(16) | 标签样式（default/primary/success/warning/danger/info） |
+| type | TINYINT | 分群类型（1=手动，2=规则） |
+| group | VARCHAR(32) | 分组（用户画像/运营分群/风控 等） |
+| description | VARCHAR(500) | 分群说明 |
+| sort | INT | 排序权重（越小越靠前） |
+| status | BOOLEAN | 启用状态（0=禁用，1=启用） |
+| rule | JSON | 规则定义（仅 type=2 有效，结构含 version/logic/conditions） |
+| last_synced_at | TIMESTAMP | 最近一次规则刷新时间 |
+| last_synced_user_count | INT | 最近一次规则匹配用户数 |
+| created_at | TIMESTAMP | 创建时间 |
+| updated_at | TIMESTAMP | 更新时间 |
+
+**索引**：`code` 唯一索引、`type` 索引、`group` 索引、`status` 索引。
+
+### 8.2 分群成员表 (user_segment_memberships)
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| id | BIGINT | 主键 |
+| segment_id | BIGINT | 分群 ID（外键，级联删除） |
+| user_id | BIGINT | 用户 ID（外键，级联删除） |
+| source | TINYINT | 打标来源（1=手动，2=规则） |
+| created_at | TIMESTAMP | 打标时间 |
+
+**索引**：`uniq_segment_user` 唯一约束（segment_id + user_id）、`idx_user_segment`（user_id + segment_id）、`idx_segment_source_time`（segment_id + source + created_at）。
+
+> 用户软删时通过 `UserObserver` 自动清理分群成员记录。规则同步增量 diff 仅操作 `source=2` 的成员，不影响手动打标的成员。
+
+### 8.3 分群异步任务表 (segment_tasks)
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| id | BIGINT | 主键 |
+| admin_id | BIGINT | 提交任务的管理员 ID |
+| type | VARCHAR(32) | 任务类型（attach 打标 / detach 解标） |
+| payload | JSON | 任务载荷（segment_ids + user_ids） |
+| total_count | INT | 计划处理总数 |
+| processed_count | INT | 已处理数 |
+| added_count | INT | 实际新增/解绑数 |
+| status | VARCHAR(16) | 状态（pending/running/completed/failed） |
+| error_message | VARCHAR(1000) | 失败原因 |
+| started_at | TIMESTAMP | 开始执行时间 |
+| finished_at | TIMESTAMP | 完成时间 |
+| created_at | TIMESTAMP | 创建时间 |
+| updated_at | TIMESTAMP | 更新时间 |
+
+**索引**：`admin_id` 索引、`type` 索引、`status` + `created_at` 复合索引。
+
+> 当批量打标/解标操作超过 `BATCH_LIMIT=1000` 时自动创建任务记录并派发 `BulkSegmentTaskJob`，任务完成后发送站内信通知管理员。
+
+## 9. 系统基础表
 
 | 表名 | 说明 |
 |------|------|

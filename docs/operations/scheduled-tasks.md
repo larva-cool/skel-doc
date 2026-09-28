@@ -12,6 +12,7 @@
 | `telescope:prune --hours=48 --keep-exceptions` | 每日 01:15 | 清理 Telescope 记录 |
 | `horizon:snapshot` | 每 5 分钟 | 记录应用状态快照 |
 | `CloseExpiredRechargesJob` | 每 5 分钟 | 关闭超时未支付的充值订单（钱包 Phase 2 交付） |
+| `segments:sync-rules` | 每日 02:00 | 同步所有启用的规则分群（增量 diff，仅影响规则打标的成员，不误删手动打标） |
 
 ## 调度日志
 

@@ -398,6 +398,103 @@ SSE 流式响应通过 `text/event-stream` 逐行推送以下事件类型：
 - `error`：错误
 - `done`：流结束
 
+## 31. 用户分群管理（/admin/user-segments）
+
+| 方法 | 路径 | 说明 | 权限 |
+|------|------|------|------|
+| GET | `/admin/user-segments` | 分群列表（分页，支持 `keyword`/`type`/`group`/`status` 筛选） | segments.index |
+| POST | `/admin/user-segments` | 新建分群（规则分群必填 `code` + `rule`） | segments.create |
+| GET | `/admin/user-segments/options` | 启用手动分群下拉选项（公告群发复用） | segments.index |
+| GET | `/admin/user-segments/{id}` | 分群详情（含 `users_count`） | segments.index |
+| PUT | `/admin/user-segments/{id}` | 更新分群（规则分群禁止改 `code`/`rule`/`type`） | segments.edit |
+| DELETE | `/admin/user-segments/{id}` | 删除分群（级联清理 memberships） | segments.delete |
+| PUT | `/admin/user-segments/{id}/toggle-status` | 启用/停用切换 | segments.edit |
+| POST | `/admin/user-segments/{id}/sync` | 手动触发规则同步（增量 diff） | segments.edit |
+| GET | `/admin/user-segments/{id}/preview` | 规则预览（不写库，返回 `total` + `sample`） | segments.index |
+| GET | `/admin/user-segments/{id}/users` | 分群下用户列表（分页，支持 `keyword` 筛选） | segments.index |
+| POST | `/admin/user-segments/{id}/attach` | 单分群批量绑定用户（>1000 异步入队返回 202） | segments.edit |
+| POST | `/admin/user-segments/{id}/detach` | 单分群批量解绑用户（>1000 异步入队返回 202） | segments.assign |
+| POST | `/admin/user-segments/batch-attach` | 笛卡尔批量打标（任一维度 >1000 异步入队） | segments.edit |
+| POST | `/admin/user-segments/batch-detach` | 笛卡尔批量解标（任一维度 >1000 异步入队） | segments.assign |
+
+> 分群类型：`type=1` 手动分群（人工打标/解标），`type=2` 规则分群（基于规则 JSON 自动匹配，定时同步 + 手动同步）。规则分群的 `code` 必填且唯一，更新时不可修改 `code`/`rule`/`type`。批量操作超过 `BATCH_LIMIT=1000` 时自动入队 `BulkSegmentTaskJob`，返回 202 + `task_id`，任务完成后发送站内信通知。
+
+**分群资源字段**：
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| id | int | 分群 ID（从 10000000 起） |
+| code | string\|null | 分群编码（规则分群必填且唯一） |
+| name | string | 分群名称 |
+| label_type | string | 标签样式（default/primary/success/warning/danger/info） |
+| type | int | 分群类型（1=手动，2=规则） |
+| type_label | string | 分群类型标签 |
+| group | string\|null | 分组（用户画像/运营分群/风控 等） |
+| description | string\|null | 分群说明 |
+| sort | int | 排序权重（越小越靠前） |
+| status | bool | 启用状态 |
+| rule | object\|null | 规则定义（仅 type=2 有效） |
+| last_synced_at | string\|null | 最近一次规则刷新时间 |
+| last_synced_user_count | int\|null | 最近一次规则匹配用户数 |
+| users_count | int\|null | 分群用户数（仅详情接口返回） |
+| created_at | string | 创建时间 |
+| updated_at | string | 更新时间 |
+
+**规则 JSON 结构**：
+
+```json
+{
+  "version": 1,
+  "logic": "and",
+  "conditions": [
+    {
+      "field": "status",
+      "operator": "=",
+      "value": 1
+    },
+    {
+      "field": "last_active_at",
+      "operator": ">",
+      "value": "now-7d"
+    }
+  ]
+}
+```
+
+规则字段（10 个）：`status`、`identity_status`、`identity_type`、`vip_expires_at`、`last_login_at`、`last_active_at`、`created_at`、`available_points`、`available_coins`、`login_count`。
+
+操作符（11 种）：`=`、`!=`、`>`、`>=`、`<`、`<=`、`between`、`in`、`not_in`、`is_null`、`is_not_null`。
+
+动态时间值：`now`、`today`、`now-7d`、`now-3h`、`today-1d` 等。
+
+## 32. 分群异步任务（/admin/segment-tasks）
+
+| 方法 | 路径 | 说明 | 权限 |
+|------|------|------|------|
+| GET | `/admin/segment-tasks` | 当前管理员的异步任务列表（分页，支持 `status`/`type` 筛选） | segments.assign |
+| GET | `/admin/segment-tasks/{id}` | 异步任务详情（含进度百分比） | segments.assign |
+
+> 任务由批量打标/解标超限时自动创建，仅可查看本人提交的任务。任务状态流转：`pending` → `running` → `completed`/`failed`。
+
+**任务资源字段**：
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| id | int | 任务 ID |
+| admin_id | int | 提交任务的管理员 ID |
+| type | string | 任务类型（attach 打标 / detach 解标） |
+| type_label | string | 任务类型标签 |
+| status | string | 状态（pending/running/completed/failed） |
+| status_label | string | 状态标签 |
+| total_count | int | 计划处理总数 |
+| processed_count | int | 已处理数 |
+| added_count | int | 实际新增/解绑数 |
+| progress_percent | int | 进度百分比（0-100） |
+| error_message | string\|null | 失败原因 |
+| started_at | string\|null | 开始执行时间 |
+| finished_at | string\|null | 完成时间 |
+| created_at | string | 创建时间 |
+
 ---
 
 > 文档来源：PRD 第 6.3 节
