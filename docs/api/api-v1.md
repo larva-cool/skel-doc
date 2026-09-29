@@ -98,13 +98,16 @@
 |------|------|------|
 | GET | `/api/v1/banners` | 获取公开 Banner 列表（自动过滤禁用/未开始/已过期） |
 
-## 8. 反馈
+## 9. 用户反馈（/api/v1/user/feedbacks）
+
+> 全部接口需 Sanctum 登录认证，反馈自动绑定当前登录用户（`user_id` 由服务端注入，无需客户端传）。
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
-| POST | `/api/v1/feedbacks` | 提交用户反馈 |
+| POST | `/api/v1/user/feedbacks` | 提交用户反馈（成功返回 201，响应体含反馈单号 `code`） |
+| GET | `/api/v1/user/feedbacks/my` | 我的反馈列表（分页，按提交时间倒序） |
 
-## 9. 钱包接口（/api/v1/user/wallet）
+## 10. 钱包接口（/api/v1/user/wallet）
 
 | 方法 | 路径 | 说明 | 状态 |
 |------|------|------|------|
@@ -127,13 +130,13 @@
 - 前台提现响应使用 `Api\V1\WithdrawResource`，脱敏展示，不返回 `owner`、`client_ip`、`reviewed_by`、`remark` 等内部字段
 - 支付渠道对接已挂起，`pay_channel` 当前仅接受 `manual`，到账由管理员在后台确认
 
-## 10. 字典公开接口
+## 11. 字典公开接口
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
 | GET | `/api/v1/dict-items` | 公开字典项查询（按 code 获取字典数据） |
 
-## 11. 支付回调（/callback）
+## 12. 支付回调（/callback）
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
