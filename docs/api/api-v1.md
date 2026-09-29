@@ -39,6 +39,7 @@
 | DELETE | `/api/v1/user` | 注销并删除自己的账户 |
 | GET | `/api/v1/user/notifications` | 通知列表 |
 | GET | `/api/v1/user/login-histories` | 登录历史 |
+| GET | `/api/v1/user/socials` | 当前用户绑定的第三方账号列表（分页，可按 `provider` 过滤；openid/unionid 脱敏） |
 | GET | `/api/v1/user/identity` | 当前用户最新一条实名认证记录 |
 | GET | `/api/v1/user/identity/status` | 简要实名认证状态 |
 | POST | `/api/v1/user/identity` | 提交/重新提交实名认证（personal 个人 / enterprise 企业） |
