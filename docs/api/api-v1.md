@@ -28,10 +28,15 @@
 | 方法 | 路径 | 说明 |
 |------|------|------|
 | GET | `/api/v1/user/*` | 用户个人中心（资料、密码、通知、积分、金币、登录历史等） |
-| PUT | `/api/v1/user/profile` | 修改个人资料 |
-| PUT | `/api/v1/user/password` | 修改密码 |
-| PUT | `/api/v1/user/phone` | 修改手机号 |
-| PUT | `/api/v1/user/email` | 修改邮箱 |
+| GET | `/api/v1/user` | 获取基本资料 |
+| POST | `/api/v1/user/profile` | 修改个人资料 |
+| POST | `/api/v1/user/avatar` | 修改头像（multipart/form-data，字段 `avatar`，自动转 WebP） |
+| POST | `/api/v1/user/username` | 修改用户名 |
+| POST | `/api/v1/user/password` | 修改密码 |
+| POST | `/api/v1/user/phone` | 修改手机号 |
+| POST | `/api/v1/user/email` | 修改邮箱 |
+| POST | `/api/v1/user/verification-mail` | 发送验证邮件 |
+| DELETE | `/api/v1/user` | 注销并删除自己的账户 |
 | GET | `/api/v1/user/notifications` | 通知列表 |
 | GET | `/api/v1/user/login-histories` | 登录历史 |
 | GET | `/api/v1/user/identity` | 当前用户最新一条实名认证记录 |
@@ -41,6 +46,28 @@
 | POST | `/api/v1/user/addresses` | 新增收货地址 |
 | PUT | `/api/v1/user/addresses/{id}` | 更新收货地址 |
 | DELETE | `/api/v1/user/addresses/{id}` | 删除收货地址 |
+
+### 4.1 修改头像（POST `/api/v1/user/avatar`）
+
+- 需 Sanctum 登录认证，请求格式为 `multipart/form-data`
+
+| 表单字段 | 类型 | 必填 | 说明 |
+|----------|------|------|------|
+| `avatar` | file | 是 | 头像图片，支持 jpg/jpeg/png/gif |
+
+服务端处理：图片经 Intervention 统一转换为 WebP（质量 60），以用户 ID 命名（`{id}.webp`），按 ID 补零 9 位分两级目录存储（`avatar/000/0000/{id}.webp`），重复上传直接覆盖旧头像；上传结果写入附件台账，更新资料后派发 `UserProfileUpdated` 事件（驱动完善资料任务进度）。
+
+成功响应 `200`：
+
+```json
+{
+  "message": "头像修改完成",
+  "path": "avatar/000/0000/1.webp",
+  "avatar": "avatar/000/0000/1.webp"
+}
+```
+
+错误响应：未登录返回 `401`；未传文件或文件类型不合法返回 `422`（`errors.avatar` 含具体校验信息）。
 
 ## 5. 内容互动接口
 
