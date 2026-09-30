@@ -177,6 +177,21 @@
 | DELETE | `/admin/feedbacks/{feedback}` | 删除反馈 | feedbacks.delete |
 | GET | `/admin/feedbacks/export` | 导出反馈列表（xlsx） | feedbacks.export |
 
+## 14b. 举报管理（/admin/reports）
+
+| 方法 | 路径 | 说明 | 权限 |
+|------|------|------|------|
+| GET | `/admin/reports` | 举报列表（分页，支持 `keyword`/`status`/`category`/`reportable_type`/`handler_id`/`start_date`/`end_date` 过滤） | reports.index |
+| GET | `/admin/reports/stats` | 举报统计（总量、待处理、今日新增、已结案） | reports.index |
+| GET | `/admin/reports/{report}` | 举报详情（含 `reason`、`evidence`、`reportable_snapshot` 被举报对象快照、`process_actions`/`process_remark` 处理记录） | reports.index |
+| PUT | `/admin/reports/{report}` | 处理举报（`status` ∈ `resolved`/`rejected`，可选 `remark`，可选 `actions` 联动处置数组：含 `type` ∈ `hide_comment`/`delete_comment`/`freeze_user`，`freeze_user` 可选 `duration` 冻结天数 0=永久） | reports.edit |
+| GET | `/admin/reports/export` | 导出举报列表（xlsx，同步/异步双通道，阈值 1000 行） | reports.export |
+
+> - 被举报对象使用多态 `reportable_type` 全限定类名（`App\Models\Content\Comment`、`App\Models\User` 等）存储，详情接口返回按 `reportable_snapshot.type` 区分的快照（`comment`/`user`），对象已被删除时返回 `null`。
+> - 联动处置仅在 `status=resolved` 时执行；`status=rejected` 不下发动作。
+> - 同一管理员连续处理的中间状态由 `pending → processing` 自动流转，避免多人重复操作；已结案（resolved/rejected）的举报不可再次处理。
+> - 状态机：`pending`（待处理） → `processing`（处理中，自动） → `resolved`（已处理）/ `rejected`（已驳回，管理员手动）
+
 ## 15. 公共选项（/admin/common）
 
 | 方法 | 路径 | 说明 | 认证 |

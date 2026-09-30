@@ -146,6 +146,15 @@
 | POST | `/api/v1/user/feedbacks` | 提交用户反馈（成功返回 201，响应体含反馈单号 `code`） |
 | GET | `/api/v1/user/feedbacks/my` | 我的反馈列表（分页，按提交时间倒序） |
 
+## 9b. 用户举报（/api/v1/user/reports）
+
+> 全部接口需 Sanctum 登录认证，举报自动绑定当前登录用户。被举报对象使用 `morph_alias` (`comment` / `user`) 接收，服务端按 morphMap 解析为全限定类名并校验目标存在。
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | `/api/v1/user/reports` | 提交举报。Body：`target_type` ∈ `comment`/`user`、`target_id`、`category`（取自字典 `report_category`，9 类）、可选 `reason`（≤500 字）、可选 `evidence`（≤9 个 URL）。成功返回 201。同一人对同一目标在 `pending`/`processing` 状态下不可重复提交（返回 422）。`reason` 内容会经过敏感词过滤。目标对象不存在返回 422 |
+| GET | `/api/v1/user/reports/my` | 我的举报列表（分页，按提交时间倒序） |
+
 ## 10. 钱包接口（/api/v1/user/wallet）
 
 | 方法 | 路径 | 说明 | 状态 |
