@@ -21,7 +21,7 @@
 | 技术架构 | [技术栈](../architecture/tech-stack.md)、[项目结构](../architecture/project-structure.md)、[架构设计](../architecture/architecture-design.md) |
 | 数据模型 | [核心数据表](../database/core-tables.md)、[业务数据表](../database/business-tables.md) |
 | API 接口 | [响应格式与状态码](../api/response-format.md)、[后台管理接口](../api/admin-api.md)、[前台 API v1](../api/api-v1.md) |
-| 技术方案 | [附件管理](../technical-solutions/attachment-management.md)、[邀请](../technical-solutions/invitation.md)、[用户任务](../technical-solutions/user-tasks.md)、[钱包](../technical-solutions/wallet.md) |
+| 技术方案 | [附件管理](../technical-solutions/attachment-management.md)、[实名认证](../technical-solutions/identity-verification.md)、[邀请](../technical-solutions/invitation.md)、[访问记录](../technical-solutions/visit-tracking.md)、[用户任务](../technical-solutions/user-tasks.md)、[钱包](../technical-solutions/wallet.md)、[举报管理](../technical-solutions/report-management.md) |
 | 运维开发 | [非功能性需求](../operations/non-functional-requirements.md)、[开发流程指南](../operations/development-guide.md)、[部署方案](../operations/deployment.md)、[监控与维护](../operations/monitoring.md)、[定时任务](../operations/scheduled-tasks.md) |
 | 路线图 | [Roadmap](roadmap.md)、[附录](appendix.md) |
 
@@ -31,6 +31,6 @@
 
 ---
 
-**文档版本**: v2.8
-**最后更新**: 2026-09-09
+**文档版本**: v2.9
+**最后更新**: 2026-09-30
 **维护人员**: Tongle Xu
