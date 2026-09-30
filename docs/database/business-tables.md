@@ -369,7 +369,54 @@
 
 > 当批量打标/解标操作超过 `BATCH_LIMIT=1000` 时自动创建任务记录并派发 `BulkSegmentTaskJob`，任务完成后发送站内信通知管理员。
 
-## 9. 系统基础表
+## 9. 举报表 (reports)
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| id | BIGINT | 主键 |
+| user_id | BIGINT | 举报人用户 ID |
+| reportable_id | BIGINT | 被举报对象 ID |
+| reportable_type | VARCHAR(255) | 被举报对象多态类型（morph alias：`comment` / `user`，由 `Relation::enforceMorphMap()` 全局别名统一管理） |
+| category | VARCHAR(32) | 举报分类（取自字典 `report_category`） |
+| reason | VARCHAR(500) | 举报描述（可空） |
+| evidence | JSON | 证据图片 URL 数组（可空） |
+| status | VARCHAR(16) | 处理状态（pending/processing/resolved/rejected） |
+| handler_id | BIGINT | 处理人管理员 ID（可空） |
+| process_remark | VARCHAR(500) | 处理备注（可空） |
+| process_actions | JSON | 处置动作记录（可空，格式见 §10） |
+| processed_at | TIMESTAMP | 处理时间（可空） |
+| created_at | TIMESTAMP | 创建时间 |
+| updated_at | TIMESTAMP | 更新时间（列存在，但模型声明 `UPDATED_AT = null` 不自动维护，值恒为 NULL） |
+
+**索引**：
+- 主键
+- `reportable_type + reportable_id` 复合索引（多态查询）
+- `status + category + created_at` 复合索引（筛选）
+- `handler_id + processed_at` 复合索引（按处理人查询）
+- `user_id + status` 复合索引（用户自己的举报列表）
+
+**字典**：`report_category`（举报分类），固定 9 项：色情低俗、暴力血腥、政治敏感、广告营销、辱骂人身攻击、虚假信息、侵权抄袭、违法违规、其他。
+
+**唯一性约束**：业务层校验同一 `(user_id, reportable_type, reportable_id)` 在 `pending`/`processing` 状态下不可重复提交，数据库层不强制。
+
+## 10. process_actions JSON 协议
+
+`reports.process_actions` 为 JSON 数组，每项结构：
+
+```json
+[
+  { "type": "hide_comment", "reason": null },
+  { "type": "delete_comment", "reason": null },
+  { "type": "freeze_user", "reason": null }
+]
+```
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| type | string | 处置动作类型：`hide_comment` / `delete_comment` / `freeze_user` |
+| reason | string \| null | 动作说明（可空） |
+
+## 11. 系统基础表
 
 | 表名 | 说明 |
 |------|------|

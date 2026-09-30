@@ -99,7 +99,8 @@ export default defineConfig({
           { text: '邀请', link: '/technical-solutions/invitation' },
           { text: '访问记录', link: '/technical-solutions/visit-tracking' },
           { text: '用户任务', link: '/technical-solutions/user-tasks' },
-          { text: '钱包', link: '/technical-solutions/wallet' }
+          { text: '钱包', link: '/technical-solutions/wallet' },
+          { text: '举报管理', link: '/technical-solutions/report-management' }
         ]
       },
       {
