@@ -96,10 +96,21 @@
 | POST | `/api/v1/comments` | 发布评论（支持 `parent_id` 回复、`mentioned_users` 艾特） |
 | DELETE | `/api/v1/comments/{comment}` | 删除评论（仅本人） |
 
-### 5.4 内容互动约定
+### 5.4 访问记录（/api/v1/visits）
 
-- 点赞、收藏全部接口需 Sanctum 认证；评论仅 `POST`/`DELETE` 需认证，列表公开
-- 写入参数：`source_type`（必填，须为 `config/morph_maps.php` 已注册别名）、`source_id`（必填）、`extra`（可选，JSON）
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | `/api/v1/visits` | 记录一次访问（`user_id` / `ip` 由后端注入，前端仅传 `source_type` + `source_id`） |
+| GET | `/api/v1/user/visits` | 我的访问记录（分页，可按 `source_type` 过滤） |
+
+- 两条接口均需 Sanctum 认证；写入接口由 `RecordVisitRequest::prepareForValidation()` 合并 `user_id` 与 `ip`，控制器不直接拼装
+- 资源校验复用现有 `source_types()` 白名单（同 Like/Collection），`source_type` 命中多态别名之外的值返回 `422`
+- **不做唯一约束**：同一用户对同一资源可重复访问，符合 PV 语义
+
+### 5.5 内容互动约定
+
+- 点赞、收藏、访问记录全部接口需 Sanctum 认证；评论仅 `POST`/`DELETE` 需认证，列表公开
+- 写入参数：`source_type`（必填，须为 `config/morph_maps.php` 已注册别名）、`source_id`（必填）、`extra`（可选，JSON，仅点赞/收藏使用）
 - 点赞/收藏对同一资源重复提交返回 `422`，由 `Rule::unique` 拦截
 - 越权删除他人记录返回 `403`，由 `LikePolicy` / `CollectionPolicy` / `CommentPolicy` 校验
 - 响应中的 `user_id` 通过模型 `#[Hidden]` 隐藏

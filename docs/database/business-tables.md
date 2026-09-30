@@ -131,6 +131,21 @@
 - 计数列由模型事件自动维护，接入前须确认目标表已有对应字段
 - **评论楼层回复约定**：当 `source_type = 'comment'` 时表示本条为对另一条评论的回复，`source_id` 即父评论 ID；顶级评论的 `source_type` 指向业务实体（如 `user`、`post`）。后台判定回复关系与查询回复链均基于此约定，无需额外 `parent_id` 字段
 
+### 4.5 访问记录表 (visits)
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| id | bigint | 主键 |
+| user_id | bigint | 访问用户 |
+| source_type / source_id | string(255) / bigint | 多态目标（无 morphs，自行维护） |
+| ip | varbinary(16) | 访问 IP（与 `login_histories` 一致，支持 IPv4/IPv6） |
+| created_at | timestamp | 访问时间（无 `updated_at`，append-only） |
+
+- 索引：`idx_visit_source`(`source_type`,`source_id`)、`idx_visit_user_source`(`user_id`,`source_type`,`source_id`)
+- **不做唯一约束**：同一用户对同一资源可重复记录访问（PV 语义）
+- 仅 Api 模块提供记录与查询接口，Admin 后台暂不实现
+- 模型 `Visit` 关闭 `updated_at`，仅 `created_at` 由数据库 `CURRENT_TIMESTAMP` 填充
+
 ## 5. 钱包相关表（真实货币）
 
 > 设计原则：**余额热数据落在持有者主表字段上（查询零 Join），记录层全部多态**。
