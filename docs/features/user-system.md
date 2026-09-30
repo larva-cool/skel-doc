@@ -31,8 +31,9 @@
 | 第三方绑定 | 查询用户社交账号绑定记录（前台 `GET /api/v1/user/socials` + 后台 `GET /admin/users/{id}/socials`，openid/unionid 脱敏展示） |
 | 登录历史 | 记录用户登录历史 |
 | 用户分群 | 手动分群（人工打标/解标）与规则分群（基于规则 JSON 自动匹配），支持笛卡尔批量打标/解标、规则增量 diff 同步、异步任务跟踪与站内信通知，每日凌晨 2 点自动同步启用的规则分群 |
+| 访问记录 | 多态访问埋点（记录一次访问 + 我的访问记录列表），用于 PV/UV 与"最近浏览"等业务场景；append-only 模型，无 `updated_at`、无 unique 约束 |
 
-详见 [实名认证技术方案](/technical-solutions/identity-verification)。
+详见 [实名认证技术方案](/technical-solutions/identity-verification)、[访问记录技术方案](/technical-solutions/visit-tracking)。
 
 ---
 

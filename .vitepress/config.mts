@@ -97,6 +97,7 @@ export default defineConfig({
           { text: '附件管理', link: '/technical-solutions/attachment-management' },
           { text: '实名认证', link: '/technical-solutions/identity-verification' },
           { text: '邀请', link: '/technical-solutions/invitation' },
+          { text: '访问记录', link: '/technical-solutions/visit-tracking' },
           { text: '用户任务', link: '/technical-solutions/user-tasks' },
           { text: '钱包', link: '/technical-solutions/wallet' }
         ]
