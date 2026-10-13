@@ -88,7 +88,15 @@
 | POST | `/api/v1/collections` | 添加收藏 |
 | DELETE | `/api/v1/collections/{collection}` | 取消收藏 |
 
-### 5.3 评论（/api/v1/comments）
+### 5.3 关注（/api/v1/follows）
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/v1/follows` | 我的关注列表（分页，可按 `source_type` 过滤） |
+| POST | `/api/v1/follows` | 添加关注 |
+| DELETE | `/api/v1/follows/{follow}` | 取消关注 |
+
+### 5.4 评论（/api/v1/comments）
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
@@ -96,7 +104,7 @@
 | POST | `/api/v1/comments` | 发布评论（支持 `parent_id` 回复、`mentioned_users` 艾特） |
 | DELETE | `/api/v1/comments/{comment}` | 删除评论（仅本人） |
 
-### 5.4 访问记录（/api/v1/visits）
+### 5.5 访问记录（/api/v1/visits）
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
@@ -107,12 +115,12 @@
 - 资源校验复用现有 `source_types()` 白名单（同 Like/Collection），`source_type` 命中多态别名之外的值返回 `422`
 - **不做唯一约束**：同一用户对同一资源可重复访问，符合 PV 语义
 
-### 5.5 内容互动约定
+### 5.6 内容互动约定
 
-- 点赞、收藏、访问记录全部接口需 Sanctum 认证；评论仅 `POST`/`DELETE` 需认证，列表公开
-- 写入参数：`source_type`（必填，须为 `config/morph_maps.php` 已注册别名）、`source_id`（必填）、`extra`（可选，JSON，仅点赞/收藏使用）
-- 点赞/收藏对同一资源重复提交返回 `422`，由 `Rule::unique` 拦截
-- 越权删除他人记录返回 `403`，由 `LikePolicy` / `CollectionPolicy` / `CommentPolicy` 校验
+- 点赞、收藏、关注、访问记录全部接口需 Sanctum 认证；评论仅 `POST`/`DELETE` 需认证，列表公开
+- 写入参数：`source_type`（必填，须为 `config/morph_maps.php` 已注册别名）、`source_id`（必填）、`extra`（可选，JSON，仅点赞/收藏/关注使用）
+- 点赞/收藏/关注对同一资源重复提交返回 `422`，由 `Rule::unique` 拦截
+- 越权删除他人记录返回 `403`，由 `LikePolicy` / `CollectionPolicy` / `FollowPolicy` / `CommentPolicy` 校验
 - 响应中的 `user_id` 通过模型 `#[Hidden]` 隐藏
 - 列表接口使用 Laravel 标准分页，支持 `page` / `per_page`（1-100，默认 15）
 
