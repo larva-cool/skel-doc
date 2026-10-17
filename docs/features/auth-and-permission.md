@@ -29,6 +29,16 @@
 - 支持模型级多态关联（管理员、用户等多主体共用权限体系）
 - 权限检查支持中间件和 Gate 两种方式
 
+### AI 助手权限
+
+AI 助手（`/admin/chat`）复用同一套权限体系，分三层控制：
+
+1. **入口**：`ChatController` 挂载 `permission:chat.use` 中间件
+2. **工具过滤**：`Assistant::tools()` 按当前管理员的权限点动态过滤可用工具（工具实现 `RequiresPermission` 契约声明权限点）
+3. **执行兜底**：工具 `handle()` 内 `authorizeAdmin()` 二次校验，防止模型被诱导发起越权调用
+
+权限点与后台菜单共用（如 `users.index`/`users.edit`/`settings.edit`），AI 助手入口使用独立的 `chat.use` 权限点。
+
 ---
 
 > 文档来源：PRD 第 3.2 节

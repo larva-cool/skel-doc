@@ -398,13 +398,17 @@
 
 ## 30. AI 聊天（/admin/chat，SSE 流式）
 
+全部接口需 `chat.use` 权限点，缺失时返回 403。
+
 | 方法 | 路径 | 说明 | 认证 |
 |------|------|------|------|
-| GET | `/admin/chat/conversations` | 会话列表 | 是 |
-| GET | `/admin/chat/conversations/{id}` | 会话详情（含消息历史） | 是 |
-| POST | `/admin/chat` | 发送消息（SSE 流式响应） | 是 |
-| POST | `/admin/chat/approve` | 审批工具调用并继续执行 | 是 |
-| DELETE | `/admin/chat/conversations/{id}` | 删除会话 | 是 |
+| GET | `/admin/chat/conversations` | 会话列表 | 是（`chat.use`） |
+| GET | `/admin/chat/conversations/{id}` | 会话详情（含消息历史） | 是（`chat.use`） |
+| POST | `/admin/chat` | 发送消息（SSE 流式响应） | 是（`chat.use`） |
+| POST | `/admin/chat/approve` | 审批工具调用并继续执行 | 是（`chat.use`） |
+| DELETE | `/admin/chat/conversations/{id}` | 删除会话 | 是（`chat.use`） |
+
+> 工具可用性随当前管理员角色权限动态过滤（详见「AI 助手」功能文档的权限控制章节），无权限的工具不会暴露给模型，越权调用在执行层兜底拒绝。
 
 SSE 流式响应通过 `text/event-stream` 逐行推送以下事件类型：
 - `text`：文本增量
