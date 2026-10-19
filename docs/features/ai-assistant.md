@@ -42,15 +42,15 @@ AI 助手与后台 RBAC（`spatie/laravel-permission`）深度集成，采用三
 | Content | ModerateComment | 审核评论（需审批） | `comments.edit` |
 | Feedbacks | ListFeedbacks | 查询用户意见反馈 | `feedbacks.index` |
 | Feedbacks | ReplyFeedback | 处理用户反馈（需审批） | `feedbacks.edit` |
-| Files | EditFile | 局部编辑项目文件（需审批） | `chat.use` |
-| Files | GlobFiles | 按 glob 模式查找项目文件 | `chat.use` |
-| Files | GrepFiles | 按正则搜索项目文件内容 | `chat.use` |
-| Files | ReadFile | 读取项目内文本文件 | `chat.use` |
-| Files | WriteFile | 创建/覆盖项目文件（需审批） | `chat.use` |
+| Open | ListOpenAccounts | 查询开放平台账户 | `open_accounts.index` |
+| Open | RotateOpenAccountToken | 轮换开放平台账户令牌（需审批） | `open_accounts.edit` |
+| Open | SetOpenAccountStatus | 启用/冻结开放平台账户（需审批） | `open_accounts.edit` |
+| Operation | ListAgreements | 查询用户协议列表 | `agreements.index` |
 | Operation | ListAnnouncements | 查询公告列表 | `announcements.index` |
 | Operation | ListBanners | 查询 Banner 列表 | `banners.index` |
 | Operation | PublishAnnouncement | 发布/归档公告（需审批） | `announcements.edit` |
 | Operation | SetBannerStatus | 启用/禁用 Banner（需审批） | `banners.edit` |
+| Operation | UpdateAgreement | 更新用户协议（需审批） | `agreements.edit` |
 | Queue | ListFailedJobs | 查询队列失败任务 | `horizon.index` |
 | Queue | RetryFailedJob | 重试队列失败任务（需审批） | `horizon.index` |
 | Segments | ListUserSegments | 查询用户分群列表 | `segments.index` |
@@ -61,6 +61,7 @@ AI 助手与后台 RBAC（`spatie/laravel-permission`）深度集成，采用三
 | System | AddSensitiveWord | 新增敏感词（需审批） | `sensitive-words.create` |
 | System | GetAreas | 查询地区数据 | `areas.index` |
 | System | ListAdmins | 查询后台管理员列表 | `admins.index` |
+| System | ListAttachments | 查询附件列表 | `attachments.index` |
 | System | ListDicts | 查询字典类型与字典数据 | `dicts.index` |
 | System | ListRoles | 查询后台角色及权限构成 | `roles.index` |
 | System | ListScheduleLogs | 查询定时任务执行日志 | `schedules.index` |
