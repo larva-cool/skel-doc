@@ -36,6 +36,7 @@ AI 助手与后台 RBAC（`spatie/laravel-permission`）深度集成，采用三
 | Audit | ListLoginHistories | 查询登录历史 | `login-histories.index` |
 | Audit | ListVerificationCodes | 查询验证码记录 | `phone-codes.index` 或 `mail-codes.index`（任一） |
 | Feedbacks | ListFeedbacks | 查询用户意见反馈 | `feedbacks.index` |
+| Feedbacks | ReplyFeedback | 处理用户反馈（需审批） | `feedbacks.edit` |
 | Settings | GetSetting | 获取系统设置 | `settings.index` |
 | Settings | SetSetting | 设置系统配置值（需审批） | `settings.edit` |
 | Stats | GetDashboardStats | 获取仪表盘统计数据 | `chat.use` |
@@ -49,10 +50,13 @@ AI 助手与后台 RBAC（`spatie/laravel-permission`）深度集成，采用三
 | Users | GetUserSocials | 获取用户第三方绑定 | `users.index` |
 | Users | ResetUserContact | 重置用户联系方式（需审批） | `users.edit` |
 | Users | ResetUserPassword | 重置用户密码（需审批） | `users.edit` |
+| Users | ReviewIdentityVerification | 审核实名认证（需审批） | `identity-verifications.edit` |
+| Users | SendUserNotification | 向用户发送站内通知（需审批） | `users.edit` |
 | Users | SetUserStatus | 设置用户状态（需审批） | `users.edit` |
 | Wallet | ListRecharges | 查询充值订单 | `wallet.orders` |
 | Wallet | ListWalletTrades | 查询钱包流水 | `wallet.index` |
 | Wallet | ListWithdraws | 查询提现申请 | `wallet.withdraws` |
+| Wallet | ReviewWithdraw | 审核提现申请（需审批） | `wallet.withdraws` |
 | Web | WebFetch | 网页抓取 | `chat.use` |
 
 ## SSE 事件类型
