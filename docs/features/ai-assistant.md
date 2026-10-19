@@ -7,7 +7,7 @@
 | 功能 | 说明 |
 |------|------|
 | SSE 流式对话 | 以 Server-Sent Events 实时推送 AI 响应，支持思考过程（reasoning）和文本输出 |
-| 工具调用 | AI 可调用内置工具查询数据或执行操作（审计日志查询、验证码查询、系统设置读写、仪表盘统计、地区查询、系统信息、用户管理、网页抓取等） |
+| 工具调用 | AI 可调用内置工具查询数据或执行操作（审计日志查询、验证码查询、系统设置读写、仪表盘统计、地区查询、系统信息、用户管理、钱包流水/充值/提现查询、意见反馈查询、实名认证查询、网页抓取等） |
 | 工具审批 | 敏感操作（如调整用户余额、VIP 延期、重置密码等）需管理员二次审批后继续执行 |
 | 对话历史 | 按会话（Conversation）保存对话记录，支持查看历史会话、删除会话 |
 | 权限控制 | 接口入口由 `chat.use` 权限点保护；工具按当前管理员角色权限动态过滤，越权调用在执行层兜底拒绝 |
@@ -32,14 +32,17 @@ AI 助手与后台 RBAC（`spatie/laravel-permission`）深度集成，采用三
 
 | 工具分类 | 工具名称 | 说明 | 所需权限 |
 |---------|---------|------|---------|
+| Audit | ListAuditLogs | 查询后台操作日志 | `audit-logs.index` |
 | Audit | ListLoginHistories | 查询登录历史 | `login-histories.index` |
 | Audit | ListVerificationCodes | 查询验证码记录 | `phone-codes.index` 或 `mail-codes.index`（任一） |
+| Feedbacks | ListFeedbacks | 查询用户意见反馈 | `feedbacks.index` |
 | Settings | GetSetting | 获取系统设置 | `settings.index` |
 | Settings | SetSetting | 设置系统配置值（需审批） | `settings.edit` |
 | Stats | GetDashboardStats | 获取仪表盘统计数据 | `chat.use` |
 | System | GetAreas | 查询地区数据 | `areas.index` |
 | System | SystemInfo | 获取系统信息 | `chat.use` |
 | Users | GetUser | 获取用户详情 | `users.index` |
+| Users | ListIdentityVerifications | 查询实名认证记录 | `identity-verifications.index` |
 | Users | ListUsers | 查询用户列表 | `users.index` |
 | Users | AdjustUserBalance | 调整用户积分/金币余额（需审批） | `users.edit` |
 | Users | ExtendUserVip | 延长用户VIP（需审批） | `users.edit` |
@@ -47,6 +50,9 @@ AI 助手与后台 RBAC（`spatie/laravel-permission`）深度集成，采用三
 | Users | ResetUserContact | 重置用户联系方式（需审批） | `users.edit` |
 | Users | ResetUserPassword | 重置用户密码（需审批） | `users.edit` |
 | Users | SetUserStatus | 设置用户状态（需审批） | `users.edit` |
+| Wallet | ListRecharges | 查询充值订单 | `wallet.orders` |
+| Wallet | ListWalletTrades | 查询钱包流水 | `wallet.index` |
+| Wallet | ListWithdraws | 查询提现申请 | `wallet.withdraws` |
 | Web | WebFetch | 网页抓取 | `chat.use` |
 
 ## SSE 事件类型
