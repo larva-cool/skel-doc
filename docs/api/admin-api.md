@@ -20,9 +20,9 @@
 | 方法 | 路径 | 说明 | 权限 |
 |------|------|------|------|
 | GET | `/admin/admins` | 管理员列表（分页） | admins.index |
-| POST | `/admin/admins` | 创建管理员 | admins.create |
+| POST | `/admin/admins` | 创建管理员（支持传入头像 `avatar`） | admins.create |
 | GET | `/admin/admins/{id}` | 管理员详情 | admins.index |
-| PUT | `/admin/admins/{id}` | 更新管理员 | admins.edit |
+| PUT | `/admin/admins/{id}` | 更新管理员（支持传入头像 `avatar`） | admins.edit |
 | DELETE | `/admin/admins/{id}` | 删除管理员 | admins.delete |
 | GET | `/admin/admins/profile` | 当前管理员资料 | - |
 | PUT | `/admin/admins/profile` | 更新当前管理员资料 | - |
