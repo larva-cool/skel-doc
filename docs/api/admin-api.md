@@ -517,6 +517,42 @@ SSE 流式响应通过 `text/event-stream` 逐行推送以下事件类型：
 | finished_at | string\|null | 完成时间 |
 | created_at | string | 创建时间 |
 
+## 33. AI 知识库（/admin/knowledge-documents）
+
+RAG 知识库管理。文档保存后自动派发异步索引任务（段落分块 + Embedding 向量化，经队列执行），仅「已完成索引且启用」的文档参与语义检索；AI 助手内置 `SearchKnowledgeBase` 工具按 `knowledge-documents.index` 权限检索知识库。
+
+| 方法 | 路径 | 说明 | 权限 |
+|------|------|------|------|
+| GET | `/admin/knowledge-documents` | 文档列表（分页，支持 `keyword` 标题搜索、`status` 索引状态、`is_enabled` 筛选） | knowledge-documents.index |
+| POST | `/admin/knowledge-documents` | 新增文档（自动派发索引任务，状态置为 pending） | knowledge-documents.create |
+| GET | `/admin/knowledge-documents/{id}` | 文档详情（含原始内容 content） | knowledge-documents.index |
+| PUT | `/admin/knowledge-documents/{id}` | 更新文档（content 变更时自动重建索引） | knowledge-documents.edit |
+| PUT | `/admin/knowledge-documents/{id}/toggle-status` | 切换启用状态（停用不参与检索） | knowledge-documents.edit |
+| POST | `/admin/knowledge-documents/{id}/reindex` | 重建索引（重置为 pending 并重新分块向量化） | knowledge-documents.edit |
+| DELETE | `/admin/knowledge-documents/{id}` | 删除文档（分块级联删除） | knowledge-documents.delete |
+| GET | `/admin/knowledge-documents/{id}/chunks` | 文档分块列表（分页） | knowledge-documents.index |
+| POST | `/admin/knowledge-documents/search` | 语义检索测试（`query` 必填、`limit` 默认 5 最大 10，按余弦相似度降序返回 Top-N 分块及来源文档、得分） | knowledge-documents.index |
+
+> 索引状态流转：`pending` → `processing` → `ready`/`failed`；失败原因记录在文档 `error` 字段，可通过 reindex 重建。向量模型由 `config/ai.php` 的 `volc` provider 提供（默认 `doubao-embedding-vision-250615`，可用 `VOLC_EMBEDDINGS_MODEL` / `VOLC_EMBEDDINGS_DIMENSIONS` 覆盖）。
+
+**文档资源字段**：
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| id | int | 文档 ID |
+| title | string | 文档标题 |
+| content | string | 原始内容（仅详情接口返回） |
+| status | string | 索引状态（pending/processing/ready/failed） |
+| status_label | string | 索引状态文案 |
+| status_type | string | 索引状态标签样式 |
+| is_enabled | bool | 是否启用 |
+| chunks_count | int | 分块数量 |
+| tokens | int | 向量化消耗的 Tokens |
+| error | string\|null | 最近一次索引失败原因 |
+| created_by | int\|null | 创建管理员 ID |
+| created_at | string\|null | 创建时间 |
+| updated_at | string\|null | 更新时间 |
+
 ## 协议管理（/admin/agreements）
 
 | 方法 | 路径 | 说明 | 权限 |

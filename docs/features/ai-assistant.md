@@ -7,7 +7,8 @@
 | 功能 | 说明 |
 |------|------|
 | SSE 流式对话 | 以 Server-Sent Events 实时推送 AI 响应，支持思考过程（reasoning）和文本输出 |
-| 工具调用 | AI 可调用内置工具查询数据或执行操作（审计日志查询、验证码查询、系统设置读写、仪表盘统计、地区查询、系统信息、用户管理与站内通知、钱包流水/充值/提现查询与提现审核、意见反馈查询与处理、实名认证查询与审核、公告/Banner/敏感词/评论/协议管理、用户分群同步、任务系统查询、队列失败任务查询与重试、定时任务查询、App 版本查询、字典查询、管理员/角色查询、举报处理、邀请记录查询、附件查询、开放平台账户管理与令牌轮换、网页抓取等） |
+| 工具调用 | AI 可调用内置工具查询数据或执行操作（审计日志查询、验证码查询、系统设置读写、仪表盘统计、地区查询、系统信息、用户管理与站内通知、钱包流水/充值/提现查询与提现审核、意见反馈查询与处理、实名认证查询与审核、公告/Banner/敏感词/评论/协议管理、用户分群同步、任务系统查询、队列失败任务查询与重试、定时任务查询、App 版本查询、字典查询、管理员/角色查询、举报处理、邀请记录查询、附件查询、开放平台账户管理与令牌轮换、知识库语义检索（RAG）、网页抓取等） |
+| 知识库（RAG） | 知识库文档经「段落分块 + Embedding 向量化」异步索引后，AI 可通过 `SearchKnowledgeBase` 工具做语义检索，回答平台业务规则、产品说明、操作指南等知识类问题；知识库管理见「AI 知识库」接口章节 |
 | 工具审批 | 敏感操作（如调整用户余额、VIP 延期、重置密码等）需管理员二次审批后继续执行 |
 | 对话历史 | 按会话（Conversation）保存对话记录，支持查看历史会话、删除会话 |
 | 权限控制 | 接口入口由 `chat.use` 权限点保护；工具按当前管理员角色权限动态过滤，越权调用在执行层兜底拒绝 |
@@ -42,6 +43,7 @@ AI 助手与后台 RBAC（`spatie/laravel-permission`）深度集成，采用三
 | Content | ModerateComment | 审核评论（需审批） | `comments.edit` |
 | Feedbacks | ListFeedbacks | 查询用户意见反馈 | `feedbacks.index` |
 | Feedbacks | ReplyFeedback | 处理用户反馈（需审批） | `feedbacks.edit` |
+| Knowledge | SearchKnowledgeBase | 知识库语义检索（RAG） | `knowledge-documents.index` |
 | Open | ListOpenAccounts | 查询开放平台账户 | `open_accounts.index` |
 | Open | RotateOpenAccountToken | 轮换开放平台账户令牌（需审批） | `open_accounts.edit` |
 | Open | SetOpenAccountStatus | 启用/冻结开放平台账户（需审批） | `open_accounts.edit` |
@@ -53,6 +55,7 @@ AI 助手与后台 RBAC（`spatie/laravel-permission`）深度集成，采用三
 | Operation | UpdateAgreement | 更新用户协议（需审批） | `agreements.edit` |
 | Queue | ListFailedJobs | 查询队列失败任务 | `horizon.index` |
 | Queue | RetryFailedJob | 重试队列失败任务（需审批） | `horizon.index` |
+| Segments | CreateUserSegment | 创建用户分群（需审批） | `segments.create` |
 | Segments | ListUserSegments | 查询用户分群列表 | `segments.index` |
 | Segments | SyncUserSegment | 同步规则分群成员（需审批） | `segments.edit` |
 | Settings | GetSetting | 获取系统设置 | `settings.index` |

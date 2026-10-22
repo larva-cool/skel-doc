@@ -425,6 +425,41 @@
 | jobs / job_batches / failed_jobs | 队列任务/批次/失败任务 |
 | pulse_values / pulse_entries / pulse_aggregates | Laravel Pulse 监控数据 |
 
+## 12. AI 知识库表
+
+### 12.1 知识库文档表 (knowledge_documents)
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| id | BIGINT | 主键 |
+| title | VARCHAR(200) | 文档标题 |
+| content | LONGTEXT | 文档原始内容 |
+| status | VARCHAR(20) | 索引状态（pending/processing/ready/failed，枚举 KnowledgeDocumentStatus），带索引 |
+| is_enabled | BOOLEAN | 是否启用（停用的文档不参与检索） |
+| chunks_count | UNSIGNED INT | 分块数量 |
+| tokens | UNSIGNED INT | 向量化消耗的 Tokens |
+| error | VARCHAR(500) | 最近一次索引失败原因（可空） |
+| created_by | BIGINT | 创建管理员 ID（可空，带索引） |
+| created_at | TIMESTAMP | 创建时间 |
+| updated_at | TIMESTAMP | 更新时间 |
+
+> 文档保存后自动派发 `ProcessKnowledgeDocumentJob` 异步索引任务（段落分块 + Embedding 向量化）；内容变更自动重建，亦可手动 reindex。索引状态流转：`pending` → `processing` → `ready`/`failed`。
+
+### 12.2 知识库文档分块表 (knowledge_chunks)
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| id | BIGINT | 主键 |
+| document_id | BIGINT | 所属文档 ID（外键级联删除，带索引） |
+| content | TEXT | 分块文本内容 |
+| embedding | JSON | 向量（JSON 数组，维度由配置的 Embedding 模型决定，默认 2048） |
+| tokens | UNSIGNED INT | 该分块向量化消耗的 Tokens |
+| sort | UNSIGNED SMALLINT | 分块在文档内的顺序 |
+| created_at | TIMESTAMP | 创建时间 |
+| updated_at | TIMESTAMP | 更新时间 |
+
+> 语义检索时将查询文本向量化，与分块向量做余弦相似度计算，按得分降序返回 Top-N；仅召回「已完成索引且启用」文档的分块。
+
 ---
 
 > 文档来源：PRD 第 5.1 节
