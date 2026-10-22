@@ -481,9 +481,16 @@ SSE 流式响应通过 `text/event-stream` 逐行推送以下事件类型：
 }
 ```
 
-规则字段（12 个）：`status`、`gender`、`birthday`、`identity_status`、`identity_type`、`vip_expires_at`、`last_login_at`、`last_active_at`、`created_at`、`available_points`、`available_coins`、`login_count`。
+规则字段（25 个）：
 
-> `gender`（性别：0=保密/1=男/2=女）和 `birthday`（生日）字段位于 `user_profiles` 表，通过 `profile` 关联查询，其余字段位于 `users` 主表。
+- 主表字段：`status`、`identity_status`、`identity_type`、`vip_expires_at`、`last_login_at`、`last_active_at`、`created_at`、`available_points`、`available_coins`、`login_count`、`balance`（可用余额）、`frozen_balance`（冻结余额）、`email`、`phone`、`username`（后三者仅支持 `is_null`/`is_not_null` 判定绑定状态）
+- `profile` 关联字段：`gender`、`birthday`、`province_id`（省份 ID）、`city_id`（城市 ID）
+- `extra` 关联字段：`email_verified_at`（邮箱验证时间，仅支持空值判定）
+- 关系存在性字段：`social_provider`（社交平台绑定，`=` 已绑定 / `!=` 未绑定，取值 `wechat_mp`/`wechat_app`/`wechat_mini_program`/`apple`/`douyin`/`kuaishou`/`xiaohongshu`）
+- 关系计数字段：`recharge_count`（充值次数，仅统计已到账）、`withdraw_count`（提现次数）、`invite_count`（邀请人数），仅支持比较操作符
+- 关系求和字段：`recharge_total`（累计充值金额，仅统计已到账，支持比较与 `between`；无充值记录的用户不会被 `= 0` 类条件命中）
+
+> `gender`（性别：0=保密/1=男/2=女）、`birthday`（生日）、`province_id`、`city_id` 字段位于 `user_profiles` 表，通过 `profile` 关联查询；`email_verified_at` 位于 `user_extras` 表，通过 `extra` 关联查询。
 
 操作符（11 种）：`=`、`!=`、`>`、`>=`、`<`、`<=`、`between`、`in`、`not_in`、`is_null`、`is_not_null`。
 
