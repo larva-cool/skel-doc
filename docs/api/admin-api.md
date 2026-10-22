@@ -149,6 +149,7 @@
 | GET | `/admin/comments/{comment}` | 评论详情（含 `ip_address`、`is_reply`、`parent_comment` 上级评论摘要） | comments.index |
 | GET | `/admin/comments/{comment}/replies` | 回复列表（分页，返回该评论下的直接回复） | comments.index |
 | POST | `/admin/comments/{comment}/review` | 审核评论（`status` 取 `approved`/`rejected`/`review`，可选 `remark`） | comments.edit |
+| POST | `/admin/comments/{comment}/ai-review` | AI 敏感词命中智能复核（先本地词库检测命中词，再由 AI 语境复核减少误杀；返回 `suggestion`(approve/reject)/`reason`/`hits`，仅辅助建议不改状态） | comments.edit |
 | DELETE | `/admin/comments/{comment}` | 删除评论 | comments.delete |
 | GET | `/admin/comments/export` | 导出评论列表（xlsx） | comments.export |
 
@@ -174,6 +175,7 @@
 | GET | `/admin/feedbacks/stats` | 反馈统计（总量、待推进、今日新增、已闭环） | feedbacks.index |
 | GET | `/admin/feedbacks/{feedback}` | 反馈详情（含附件图片、客户端信息） | feedbacks.index |
 | PUT | `/admin/feedbacks/{feedback}` | 处理反馈（调整 `status`/`priority`、填写 `admin_remark`） | feedbacks.edit |
+| POST | `/admin/feedbacks/{feedback}/draft-reply` | AI 草拟处理回复（按反馈类型/标题/内容生成 `draft` 草稿，不修改反馈） | feedbacks.edit |
 | DELETE | `/admin/feedbacks/{feedback}` | 删除反馈 | feedbacks.delete |
 | GET | `/admin/feedbacks/export` | 导出反馈列表（xlsx） | feedbacks.export |
 
@@ -185,6 +187,7 @@
 | GET | `/admin/reports/stats` | 举报统计（总量、待处理、今日新增、已结案） | reports.index |
 | GET | `/admin/reports/{report}` | 举报详情（含 `reason`、`evidence`、`reportable_snapshot` 被举报对象快照、`process_actions`/`process_remark` 处理记录） | reports.index |
 | PUT | `/admin/reports/{report}` | 处理举报（`status` ∈ `resolved`/`rejected`，可选 `remark`，可选 `actions` 联动处置数组：含 `type` ∈ `hide_comment`/`delete_comment`/`freeze_user` 与可选 `reason`；冻结为永久，不携带时长字段，需管理员人工解冻） | reports.edit |
+| POST | `/admin/reports/{report}/ai-triage` | AI 举报智能初判（结合举报分类/描述/被举报内容返回 `suggestion`(uphold/reject)/`reason`，仅辅助建议不改状态；已结案返回 422） | reports.edit |
 | GET | `/admin/reports/export` | 导出举报列表（xlsx，同步/异步双通道，阈值 1000 行） | reports.export |
 
 > - 被举报对象使用多态 `reportable_type` 存储 morph alias（`comment` / `user`，由 `Relation::enforceMorphMap()` 全局别名统一管理；列表筛选参数 `reportable_type` 同样按 alias 取值），详情接口返回按 `reportable_snapshot.type` 区分的快照（`comment`/`user`），对象已被删除时返回 `null`。
@@ -559,6 +562,18 @@ RAG 知识库管理。文档保存后自动派发异步索引任务（段落分�
 | created_by | int\|null | 创建管理员 ID |
 | created_at | string\|null | 创建时间 |
 | updated_at | string\|null | 更新时间 |
+
+## 34. AI 辅助内容生产（/admin/announcements、/admin/banners）
+
+复用 `laravel/ai` 一次性生成能力为运营场景提供 AI 辅助（`Copywriter` 文案 Agent + Seedream 绘图）。所有接口仅生成内容不落库，由管理员检查后通过原有 CRUD 接口提交。
+
+| 方法 | 路径 | 说明 | 权限 |
+|------|------|------|------|
+| POST | `/admin/announcements/ai-copy` | AI 生成公告文案（入参 `brief` 需求简述；返回 `title`/`summary`/`content`(HTML)） | announcements.create |
+| POST | `/admin/banners/ai-copy` | AI 生成 Banner 文案（入参 `brief`；返回 `title` 与 `image_prompt` 绘图提示词） | banners.create |
+| POST | `/admin/banners/ai-image` | AI 生成 Banner 配图（入参 `prompt` 绘图提示词；Seedream 3:2 横版绘图并落盘，返回 `path`/`url`） | banners.create |
+
+> 配套的审核辅助接口分布见各业务章节：评论 AI 复核（12 章）、反馈 AI 草拟（14 章）、举报 AI 初判（14b 章）。
 
 ## 协议管理（/admin/agreements）
 
