@@ -14,6 +14,7 @@
 | Laravel Scout | ^11.x | 全文搜索 |
 | Laravel Echo | ^2.x | 前端 WebSocket 客户端 |
 | Laravel AI | ^0.10.x | AI Agent 能力 |
+| larva/laravel-ai-volc | ^1.x | 火山方舟 AI 驱动（文本/向量/TTS 语音/Seedream 图像/Seedance 视频） |
 | Redis | - | 缓存和队列驱动 |
 | Predis | ^2.x | Redis 客户端 |
 | EasySMS | ^3.x | 短信发送 |

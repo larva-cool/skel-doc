@@ -91,6 +91,42 @@ AI 助手与后台 RBAC（`spatie/laravel-permission`）深度集成，采用三
 | Wallet | ReviewWithdraw | 审核提现申请（需审批） | `wallet.withdraws` |
 | Web | WebFetch | 网页抓取 | `chat.use` |
 
+## 模型提供方（Providers）
+
+AI 能力统一由 `laravel/ai` 驱动，提供方在 `config/ai.php` 配置：
+
+| Provider | 驱动 | 说明 |
+|----------|------|------|
+| `volc`（默认） | `volc` | 火山方舟，驱动由 `larva/laravel-ai-volc` 包注册，在 OpenAI 兼容协议（chat/completions）基础上扩展了 TTS 语音合成与 Seedance 视频生成能力；覆盖文本对话、Embedding 向量、语音、图像、视频五类模型 |
+| `aliyun-image` | `openai` | 阿里百炼图像生成（万相 / qwen-image） |
+
+`volc` provider 的接入点与模型默认值均可通过环境变量覆盖：
+
+| 环境变量 | 默认值 | 说明 |
+|---------|--------|------|
+| `VOLC_ARK_URL` / `VOLC_ARK_KEY` | `https://ark.cn-beijing.volces.com/api/v3` | 方舟接入点地址与密钥 |
+| `VOLC_TEXT_MODEL` | `doubao-seed-2-1-lite-260915` | 文本对话模型 |
+| `VOLC_EMBEDDINGS_MODEL` | `doubao-embedding-vision-251215` | 向量模型（知识库 Embedding） |
+| `VOLC_EMBEDDINGS_DIMENSIONS` | `2048` | 向量维度（支持传 `dimensions` 降为 1024） |
+| `VOLC_AUDIO_MODEL` | `doubao-seed-tts-2.0` | TTS 语音合成模型 |
+| `VOLC_AUDIO_VOICE` / `VOLC_AUDIO_MALE_VOICE` | 见 `config/ai.php` | 默认女 / 男音色（SDK 占位音色 `default-female` / `default-male` 分别映射到这两项） |
+| `VOLC_AUDIO_FORMAT` / `VOLC_AUDIO_SPEED` | `mp3` / `1.0` | 音频输出格式与语速 |
+| `VOLC_IMAGE_MODEL` | `doubao-seedream-5-0-pro-260628` | 图像生成模型（Seedream） |
+| `VOLC_IMAGE_WATERMARK` | `false` | 生成图右下角是否添加 AI 生成水印 |
+| `VOLC_VIDEO_MODEL` | `doubao-seedance-2-5-260628` | 视频生成模型（Seedance，异步任务：创建任务 → 轮询结果） |
+
+## 内置代理（Agents）
+
+| 代理 | 用途 | 运行配置 |
+|------|------|---------|
+| `Assistant` | 后台 AI 助手（SSE 流式对话 + 工具调用） | `MaxSteps(12)`、`Temperature(0.3)`、`Timeout(300)` |
+| `Finance` | 财务分析对话（财务数据查询与解读） | `MaxSteps(12)`、`Temperature(0.1)`、`Timeout(300)` |
+| `Copywriter` | 运营文案生成（公告 / Banner，JSON 结构输出） | `Temperature(0.7)`、`Timeout(300)` |
+| `ContentReviewer` | 内容审核辅助（评论复核 / 举报初判 / 反馈草拟） | `Temperature(0.2)`、`Timeout(300)` |
+| `WechatAssistant` | 公众号智能客服（基于公开知识库问答） | `MaxSteps(4)`、`Temperature(0.4)`、`Timeout(300)` |
+
+> 所有代理统一通过 `#[Timeout(300)]` 设置 300 秒超时，避免多步工具调用或长文本生成被默认超时中断；Banner AI 生图等一次性生成调用同样显式设置 300 秒超时。
+
 ## SSE 事件类型
 
 聊天接口通过 `text/event-stream` 逐行推送以下事件类型：

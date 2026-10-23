@@ -543,7 +543,7 @@ RAG 知识库管理。文档保存后自动派发异步索引任务（段落分�
 | GET | `/admin/knowledge-documents/{id}/chunks` | 文档分块列表（分页） | knowledge-documents.index |
 | POST | `/admin/knowledge-documents/search` | 语义检索测试（`query` 必填、`limit` 默认 5 最大 10，按余弦相似度降序返回 Top-N 分块及来源文档、得分） | knowledge-documents.index |
 
-> 索引状态流转：`pending` → `processing` → `ready`/`failed`；失败原因记录在文档 `error` 字段，可通过 reindex 重建。向量模型由 `config/ai.php` 的 `volc` provider 提供（默认 `doubao-embedding-vision-250615`，可用 `VOLC_EMBEDDINGS_MODEL` / `VOLC_EMBEDDINGS_DIMENSIONS` 覆盖）。
+> 索引状态流转：`pending` → `processing` → `ready`/`failed`；失败原因记录在文档 `error` 字段，可通过 reindex 重建。向量模型由 `config/ai.php` 的 `volc` provider 提供（默认 `doubao-embedding-vision-251215`，可用 `VOLC_EMBEDDINGS_MODEL` / `VOLC_EMBEDDINGS_DIMENSIONS` 覆盖）。
 
 **文档资源字段**：
 
@@ -571,7 +571,7 @@ RAG 知识库管理。文档保存后自动派发异步索引任务（段落分�
 |------|------|------|------|
 | POST | `/admin/announcements/ai-copy` | AI 生成公告文案（入参 `brief` 需求简述；返回 `title`/`summary`/`content`(HTML)） | announcements.create |
 | POST | `/admin/banners/ai-copy` | AI 生成 Banner 文案（入参 `brief`；返回 `title` 与 `image_prompt` 绘图提示词） | banners.create |
-| POST | `/admin/banners/ai-image` | AI 生成 Banner 配图（入参 `prompt` 绘图提示词；Seedream 3:2 横版绘图并落盘，返回 `path`/`url`） | banners.create |
+| POST | `/admin/banners/ai-image` | AI 生成 Banner 配图（入参 `prompt` 绘图提示词；Seedream 3:2 横版绘图并落盘，返回 `path`/`url`；生图调用已设置 300 秒超时） | banners.create |
 
 > 配套的审核辅助接口分布见各业务章节：评论 AI 复核（12 章）、反馈 AI 草拟（14 章）、举报 AI 初判（14b 章）。
 
