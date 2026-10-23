@@ -11,6 +11,7 @@ export default defineConfig({
 
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
+    ['meta', { name: 'baidu-site-verification', content: 'codeva-kEmMyKU0VF' }],
     ['link', { rel: 'canonical', href: 'https://www.aiforge.cn/' }],
     ['meta', { property: 'og:url', content: 'https://www.aiforge.cn/' }],
     ['meta', { property: 'og:site_name', content: 'Ai Forge' }],
