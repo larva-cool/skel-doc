@@ -2,6 +2,8 @@
 
 所有后台接口前缀为 `/admin`，需 `Authorization: Bearer {token}` 请求头。
 
+> 在线接口文档（Apifox，可在线调试）：<https://s.apifox.cn/28f8b0b7-abda-470f-8013-4e1b924c47f0>
+
 ## 1. 认证接口（/admin/auth）
 
 | 方法 | 路径 | 说明 | 认证 |

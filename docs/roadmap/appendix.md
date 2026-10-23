@@ -11,6 +11,8 @@
 | Laravel 官方文档 | https://laravel.com/docs |
 | 官方站点 | https://www.aiforge.cn |
 | 演示后台 | https://admin-demo.aiforge.cn |
+| 后台接口文档（Apifox） | https://s.apifox.cn/28f8b0b7-abda-470f-8013-4e1b924c47f0 |
+| 前台接口文档（Apifox） | https://s.apifox.cn/beffd1da-1021-434c-8f13-8cbf50a3f406 |
 | 项目首页 | [首页](/) |
 | 前端项目 | Ai Forge Admin（Vue 3 SPA 管理后台） |
 
