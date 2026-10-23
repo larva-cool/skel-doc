@@ -5,16 +5,48 @@ export default defineConfig({
   srcDir: 'docs',
   lang: 'zh-CN',
   title: 'Ai Forge',
-  description: 'Ai Forge 企业级项目套件文档',
+  titleTemplate: ':title | Ai Forge 企业级项目套件',
+  description:
+    'Ai Forge 企业级项目套件：基于 Laravel 13.x + DDD 架构的开箱即用后台管理解决方案，内置双端认证、RBAC 权限、钱包、任务、用户分群，集成 AI 助手、知识库 RAG 与多模态生成，配套 Vue 3 管理后台与完整技术文档。',
   lastUpdated: true,
   cleanUrls: true,
 
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
-    ['meta', { name: 'baidu-site-verification', content: 'codeva-kEmMyKU0VF' }],
+    [
+      'meta',
+      {
+        name: 'keywords',
+        content:
+          'Ai Forge,企业级项目套件,Laravel 骨架,Laravel 后台管理,Laravel API 骨架,DDD 架构,RBAC 权限管理,AI 助手,知识库 RAG,多模态生成,Vue 3 管理后台,RESTful API,Laravel 13'
+      }
+    ],
+    ['meta', { name: 'robots', content: 'index,follow' }],
     ['link', { rel: 'canonical', href: 'https://www.aiforge.cn/' }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:locale', content: 'zh_CN' }],
+    ['meta', { property: 'og:title', content: 'Ai Forge 企业级项目套件' }],
+    [
+      'meta',
+      {
+        property: 'og:description',
+        content:
+          '基于 Laravel 13.x + DDD 架构的开箱即用后台管理解决方案：双端认证、RBAC 权限、钱包/任务/分群业务模块，集成 AI 助手、知识库 RAG 与多模态生成，配套 Vue 3 管理后台。'
+      }
+    ],
     ['meta', { property: 'og:url', content: 'https://www.aiforge.cn/' }],
     ['meta', { property: 'og:site_name', content: 'Ai Forge' }],
+    ['meta', { property: 'og:image', content: 'https://www.aiforge.cn/logo.svg' }],
+    ['meta', { name: 'twitter:card', content: 'summary' }],
+    ['meta', { name: 'twitter:title', content: 'Ai Forge 企业级项目套件' }],
+    [
+      'meta',
+      {
+        name: 'twitter:description',
+        content:
+          '基于 Laravel 13.x + DDD 架构的开箱即用后台管理解决方案：双端认证、RBAC 权限、AI 助手、知识库 RAG 与多模态生成。'
+      }
+    ],
     ['meta', { name: 'twitter:url', content: 'https://www.aiforge.cn/' }]
   ],
 

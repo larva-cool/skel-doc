@@ -1,6 +1,8 @@
 ---
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
+title: Ai Forge 企业级项目套件 - Laravel 13 + DDD 架构后台管理骨架
+titleTemplate: false
 
 hero:
   name: "Ai Forge"
