@@ -1,7 +1,7 @@
 {
-  "name": "laravel-skel-docs",
+  "name": "aiforge-docs",
   "version": "1.0.0",
-  "description": "Laravel Skel Forge 项目文档站（基于 VitePress）",
+  "description": "Ai Forge 企业级项目套件文档站（基于 VitePress）",
   "type": "module",
   "private": true,
   "scripts": {

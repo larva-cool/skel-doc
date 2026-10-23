@@ -4,17 +4,17 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   srcDir: 'docs',
   lang: 'zh-CN',
-  title: 'Laravel Skel Forge',
-  description: 'Laravel 13.x 企业级 API 骨架项目文档',
+  title: 'Ai Forge',
+  description: 'Ai Forge 企业级项目套件文档',
   lastUpdated: true,
   cleanUrls: true,
 
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
-    ['link', { rel: 'canonical', href: 'https://skel-doc.vercel.app/' }],
-    ['meta', { property: 'og:url', content: 'https://skel-doc.vercel.app/' }],
-    ['meta', { property: 'og:site_name', content: 'Laravel Skel Forge' }],
-    ['meta', { name: 'twitter:url', content: 'https://skel-doc.vercel.app/' }]
+    ['link', { rel: 'canonical', href: 'https://www.aiforge.cn/' }],
+    ['meta', { property: 'og:url', content: 'https://www.aiforge.cn/' }],
+    ['meta', { property: 'og:site_name', content: 'Ai Forge' }],
+    ['meta', { name: 'twitter:url', content: 'https://www.aiforge.cn/' }]
   ],
 
   themeConfig: {
@@ -147,7 +147,7 @@ export default defineConfig({
 
     footer: {
       message: '基于 VitePress 构建',
-      copyright: 'Copyright © 2026'
+      copyright: 'Copyright © 2026 Ai Forge'
     }
   }
 })

@@ -284,7 +284,7 @@ POST /admin/wallet/withdraws/{id}/fail
 
 `owner_type` 直接复用已注册的 `user` / `admin` 别名，无需额外注册。
 
-## 10. 前端落地清单（laravel-skel-admin）
+## 10. 前端落地清单（Ai Forge Admin）
 
 | 文件 | 说明 |
 |------|------|

@@ -596,11 +596,11 @@ $this->getTaskProgress($taskCode): ?TaskProgress
 | **Phase 2 任务引擎（基础）** | `TaskService` 核心逻辑（周期计算、进度更新、完整度判定、签到处理、领取奖励、发奖事务、列表查询）；`UserProfileUpdated` 事件 + `ProfileTaskListener` 队列监听器；`UserController::modifyProfile` 触发事件；单元测试覆盖（12 个用例） | 完善资料类型任务奖励引擎可用 | ✅ 部分完成 |
 | **Phase 3 前台 API** | `GET /api/v1/tasks`（任务中心列表，按分组返回含进度）；`POST /api/v1/tasks/{taskId}/claim`（手动领奖）；`TaskResource` + `TaskGroupResource`；功能测试 5 个用例；Apifox Api 模块发布 | 前台用户端基础接口可用 | ✅ 已完成 |
 | **Phase 4 后台管理（分组+任务）** | `TaskGroupController`（7 个接口：列表/options/创建/详情/更新/状态切换/删除）；`TaskController`（6 个接口：列表/创建/详情/更新/状态切换/删除）；Form Request（Index+Save）；Admin Resource；菜单权限迁移；Apifox Admin 模块发布 | 运营可配置任务分组和任务 | ✅ 已完成 |
-| **Phase 5 前端落地（分组+任务）** | laravel-skel-admin 中 `src/views/operation/task-group/`（列表+搜索+编辑弹窗）和 `src/views/operation/task/`（列表+搜索+编辑弹窗，条件字段按任务类型动态显示）；API 函数 + TS 类型；`pnpm build` 通过 | 分组和任务管理 UI 可用 | ✅ 已完成 |
+| **Phase 5 前端落地（分组+任务）** | Ai Forge Admin 中 `src/views/operation/task-group/`（列表+搜索+编辑弹窗）和 `src/views/operation/task/`（列表+搜索+编辑弹窗，条件字段按任务类型动态显示）；API 函数 + TS 类型；`pnpm build` 通过 | 分组和任务管理 UI 可用 | ✅ 已完成 |
 | **Phase 2+ 剩余任务类型引擎** | 剩余 5 个事件（`UserSignedIn`/`UserLoggedIn`/`UserFollowedOfficialAccount`/`InviteRelationshipCreated`/`TaskActionTriggered`）+ 5 个监听器（SignIn/Login/Follow/Invite/CustomAction）；签到特殊 period_key 策略；邀请任务累计；自定义行为通用触发；补齐单元测试 | 全部任务类型奖励引擎可用 | ⏳ 待实现 |
 | **Phase 3+ 前台补充接口** | `POST /api/v1/tasks/sign-in` 签到专用接口（触发签到事件并返回签到结果）；签到相关的连续签到天数返回 | 前台签到功能可用 | ⏳ 待实现 |
 | **Phase 4+ 后台日志与补偿** | `TaskLogController`（日志分页列表/详情）；补发奖励接口（`POST /admin/tasks/{id}/reward`）；后台 CRUD 功能测试 | 任务审计与运营补偿能力 | ⏳ 待实现 |
-| **Phase 5+ 前端日志页面** | laravel-skel-admin 中 `src/views/operation/task-log/` 任务记录页面 | 后台任务记录 UI | ⏳ 待实现 |
+| **Phase 5+ 前端日志页面** | Ai Forge Admin 中 `src/views/operation/task-log/` 任务记录页面 | 后台任务记录 UI | ⏳ 待实现 |
 | **Phase 6 文档与收尾** | 补齐测试覆盖率至 70%+；前端开发环境联调验证；README 更新；最终 Apifox 质量检查 | 生产可用 | ⏳ 待实现 |
 
 ### 当前可用功能（截至本次实现）

@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: "Ai Forge"
-  text: "企业级 API 骨架项目"
+  text: "企业级项目套件"
   tagline: 基于 Laravel 13.x + DDD 架构，内置双端认证、RBAC 权限、钱包/任务/分群等完整业务模块，以及 AI 助手、知识库 RAG 与多模态生成的一站式 AI 能力
   image:
     src: /logo.svg

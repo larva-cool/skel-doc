@@ -1,13 +1,13 @@
-# Laravel Skel Forge 文档站点
+# Ai Forge 文档站点
 
-基于 [VitePress](https://vitepress.dev/) 构建的项目文档。
+Ai Forge 企业级项目套件的官方文档，基于 [VitePress](https://vitepress.dev/) 构建。
 
 ## 线上访问
 
 部署在 Vercel，访问地址：
 
 ```
-https://skel-doc.vercel.app/
+https://www.aiforge.cn/
 ```
 
 ## 本地开发
@@ -34,7 +34,7 @@ pnpm preview
 - 输出目录：`.vitepress/dist`（VitePress 默认值，相对于 doc 项目根）
 - 根目录：`./`
 
-环境变量无需配置，默认部署到 `https://skel-doc.vercel.app/`。
+环境变量无需配置，生产环境绑定自定义域名 `https://www.aiforge.cn/`。
 
 ## 目录结构
 

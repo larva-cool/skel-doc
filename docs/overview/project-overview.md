@@ -2,9 +2,15 @@
 
 ## 1. 项目背景
 
-Laravel Skel Forge 是一个基于 Laravel 13.x 的企业级 API 骨架项目，采用领域驱动设计（DDD）架构，内置完整的管理员/用户双端认证、RBAC 权限管理、后台管理系统、AI 助手能力，旨在为开发者提供一个快速构建高质量后端 API 服务的基础框架。
+Ai Forge 是一套企业级项目套件，旨在为开发者提供快速构建高质量应用的基础框架。套件包含：
 
-- **前端配套项目**：laravel-skel-admin（Vue 3 + TypeScript + Element Plus 管理后台 SPA）
+- **Ai Forge API**：后端 API 服务，基于 Laravel 13.x 构建，采用领域驱动设计（DDD）架构，内置完整的管理员/用户双端认证、RBAC 权限管理、后台管理系统与 AI 助手能力
+- **Ai Forge Admin**：管理后台前端（Vue 3 + TypeScript + Element Plus SPA）
+- **Ai Forge 文档站**：产品与技术文档（即本站）
+
+其他信息：
+
+- **官方站点**：<https://www.aiforge.cn>
 - **本地开发域名**：`http://laravel-skel-forge.test`（Laravel Herd 自动提供）
 
 ## 2. 项目目标

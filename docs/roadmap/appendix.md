@@ -10,7 +10,7 @@
 |------|----------|
 | Laravel 官方文档 | https://laravel.com/docs |
 | 项目首页 | [首页](/) |
-| 前端项目 | laravel-skel-admin（Vue 3 SPA 管理后台） |
+| 前端项目 | Ai Forge Admin（Vue 3 SPA 管理后台） |
 
 ## 3. 文档索引
 
