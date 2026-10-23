@@ -9,6 +9,8 @@
 | 文档 | 链接/说明 |
 |------|----------|
 | Laravel 官方文档 | https://laravel.com/docs |
+| 官方站点 | https://www.aiforge.cn |
+| 演示后台 | https://admin-demo.aiforge.cn |
 | 项目首页 | [首页](/) |
 | 前端项目 | Ai Forge Admin（Vue 3 SPA 管理后台） |
 

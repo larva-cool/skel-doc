@@ -11,6 +11,7 @@ Ai Forge 是一套企业级项目套件，旨在为开发者提供快速构建�
 其他信息：
 
 - **官方站点**：<https://www.aiforge.cn>
+- **演示后台**：<https://admin-demo.aiforge.cn>
 - **本地开发域名**：`http://laravel-skel-forge.test`（Laravel Herd 自动提供）
 
 ## 2. 项目目标
