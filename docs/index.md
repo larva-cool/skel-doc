@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: "Laravel Skel Forge"
+  name: "Ai Forge"
   text: "企业级 API 骨架项目"
   tagline: 基于 Laravel 13.x + DDD 架构，内置完整的管理员/用户双端认证、RBAC 权限管理、后台管理系统与 AI 助手能力
   actions:
@@ -11,8 +11,8 @@ hero:
       text: 快速开始
       link: /operations/development-guide
     - theme: alt
-      text: 项目概述
-      link: /overview/project-overview
+      text: 演示后台
+      link: https://admin-demo.aiforge.cn
 
 features:
   - icon: 🚀
