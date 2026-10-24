@@ -203,6 +203,45 @@
 
 回调接口豁免 CSRF 与认证中间件，必须完成渠道验签；处理逻辑幂等（同一 `order_no` 重复回调只入账一次）。
 
+## 13. MCP Server（/mcp/v1）
+
+将上述 C 端接口能力封装为 MCP（Model Context Protocol）工具，供 AI 客户端直接调用。采用进程内封装：工具直接调用业务层/模型，不经过 HTTP 转发。
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | `/mcp/v1` | MCP JSON-RPC 2.0 端点（Sanctum Token 认证） |
+
+### 接入方式
+
+- 请求头：`Authorization: Bearer <Sanctum 个人访问令牌>`，与 `/api/v1` 共用同一套用户令牌
+- Content-Type：`application/json`，请求体为 JSON-RPC 2.0（`tools/list`、`tools/call` 等）
+- 未认证返回 `401`；工具入参校验失败在 JSON-RPC 响应中返回校验错误信息
+
+### 客户端配置示例
+
+```json
+{
+  "mcpServers": {
+    "skel-api": {
+      "type": "http",
+      "url": "https://laravel-skel-forge.test/mcp/v1",
+      "headers": { "Authorization": "Bearer <token>" }
+    }
+  }
+}
+```
+
+### 已封装工具（Phase 1）
+
+| 工具名 | 说明 | 入参 |
+|--------|------|------|
+| `user.profile.get` | 当前用户基本资料（账号、昵称、头像、积分、金币、会员状态） | 无 |
+| `wallet.overview.get` | 钱包概览（余额、冻结、可用、累计收支） | 无 |
+| `common.banner.list` | 指定广告位当前生效的 Banner 列表 | `position`（必填，广告位编码） |
+
+- 工具定义位于 `app/Mcp/Tools/`，Server 定义位于 `app/Mcp/Servers/ApiServer.php`
+- 调试：`php artisan mcp:inspector mcp/v1`
+
 ---
 
 > 文档来源：PRD 第 6.4 节

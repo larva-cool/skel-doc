@@ -25,6 +25,9 @@ laravel-skel-forge/
 │   ├── Jobs/                # 队列任务（User/DeleteAccessTokenJob、StatUserJob）
 │   ├── Listeners/           # 事件监听器（Admin/、System/、User/）
 │   ├── Mail/                # 邮件类（MailVerifyCode）
+│   ├── Mcp/                 # MCP Server 与工具
+│   │   ├── Servers/         # Server 定义（ApiServer）
+│   │   └── Tools/           # 按业务域分目录（User/Wallet/Common 等）
 │   ├── Models/
 │   │   ├── Admin/           # 管理员模型（Admin、AdminMenu）
 │   │   ├── App/             # 应用版本模型（AppRelease、AppVersion）
@@ -57,6 +60,7 @@ laravel-skel-forge/
 │   ├── web.php              # Web 路由
 │   ├── admin.php            # 后台路由（前缀 /admin，通过 bootstrap/app.php 注册）
 │   ├── api_v1.php           # API v1 路由
+│   ├── ai.php               # MCP 路由（前缀 /mcp/v1）
 │   ├── channels.php         # 广播频道
 │   └── console.php          # 定时任务
 ├── stubs/                   # 自定义 Artisan stub（agent、tool）
