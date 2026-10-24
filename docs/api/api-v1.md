@@ -231,7 +231,7 @@
 }
 ```
 
-### 已封装工具（35 个，只读）
+### 已封装工具（53 个：35 只读 + 18 写操作）
 
 | 域 | 工具名 | 说明 | 入参 |
 |--------|------|------|------|
@@ -270,6 +270,36 @@
 | 公开 | `common.announcement.get` | 公告详情 | `id` |
 | 公开 | `common.agreement.get` | 最新已发布协议 | `category` |
 | 会话 | `auth.token.list` | 已签发的访问令牌列表 | 分页 |
+
+### 写操作工具（18 个）
+
+| 域 | 工具名 | 说明 | 入参 |
+|--------|------|------|------|
+| 内容互动 | `content.comment.create` | 发布评论（敏感词过滤，命中 review 级别进入待审核） | `source_type` / `source_id` / `content` / `parent_id`? / `mentioned_users`? |
+| 内容互动 | `content.comment.delete` | 删除自己的评论 | `id` |
+| 内容互动 | `content.like.create` | 点赞（同一用户同一对象防重复） | `source_type` / `source_id` / `extra`? |
+| 内容互动 | `content.like.delete` | 取消点赞 | `source_type` / `source_id` |
+| 内容互动 | `content.collection.create` | 收藏（防重复） | `source_type` / `source_id` / `extra`? |
+| 内容互动 | `content.collection.delete` | 取消收藏 | `source_type` / `source_id` |
+| 内容互动 | `content.follow.create` | 关注（防重复） | `source_type` / `source_id` / `extra`? |
+| 内容互动 | `content.follow.delete` | 取消关注 | `source_type` / `source_id` |
+| 用户资料 | `user.profile.update` | 修改个人资料（昵称、生日、性别、地区、网站、介绍、签名） | 各字段可选 |
+| 用户资料 | `user.username.update` | 修改用户名（全局唯一） | `username` |
+| 用户资料 | `user.email.update` | 修改邮箱（需邮件验证码） | `email` / `verify_code` |
+| 用户资料 | `user.phone.update` | 修改手机号（需短信验证码） | `phone` / `verify_code` |
+| 用户资料 | `user.avatar.update` | 修改头像（base64 编码图片，自动转 WebP） | `avatar_base64` / `extension` |
+| 用户资料 | `user.password.update` | 修改密码（需旧密码验证） | `old_password` / `password` |
+| 任务 | `task.claim` | 领取任务奖励 | `task_id` / `period_key`? |
+| 通知 | `notification.mark_all_read` | 全部标记已读 | 无 |
+| 通知 | `notification.mark_read` | 标记指定通知已读 | `id` |
+| 访问记录 | `visit.record` | 记录一次访问 | `source_type` / `source_id` |
+
+**写操作统一约定**：
+
+- 涉及内容发布的工具（评论、资料介绍/签名）自动经过敏感词过滤
+- 点赞/收藏/关注工具内置防重复校验，重复调用返回错误
+- 删除/详情工具仅能操作当前登录用户自己的数据，越权返回错误
+- `user.email.update` / `user.phone.update` 需先通过 `/api/v1/common/mail-captcha` 或 `/api/v1/common/sms-captcha` 获取验证码
 
 **统一约定**：
 
