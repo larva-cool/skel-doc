@@ -7,7 +7,7 @@
 | 功能 | 说明 |
 |------|------|
 | SSE 流式对话 | 以 Server-Sent Events 实时推送 AI 响应，支持思考过程（reasoning）和文本输出 |
-| 工具调用 | AI 可调用内置工具查询数据或执行操作（审计日志查询、验证码查询、系统设置读写、仪表盘统计、地区查询、系统信息、用户管理与站内通知、钱包流水/充值/提现查询与提现审核、意见反馈查询与处理、实名认证查询与审核、公告/Banner/敏感词/评论/协议管理、用户分群同步、任务系统查询、队列失败任务查询与重试、定时任务查询、App 版本查询、字典查询、管理员/角色查询、举报处理、邀请记录查询、附件查询、开放平台账户管理与令牌轮换、知识库语义检索（RAG）、网页抓取等） |
+| 工具调用 | AI 可调用内置工具查询数据或执行操作（审计日志查询、验证码查询、系统设置读写、仪表盘统计、地区查询、系统信息、用户管理与站内通知、钱包流水/充值/提现查询与提现审核、财务趋势环比/充值转化漏斗/提现异常扫描、用户增长与留存分析、流失预警名单、意见反馈查询与处理、实名认证查询与审核、公告/Banner/敏感词/评论/协议管理、用户分群同步、任务系统查询、队列失败任务查询与重试、定时任务查询、App 版本查询、字典查询、管理员/角色查询、举报处理、邀请记录查询、附件查询、开放平台账户管理与令牌轮换、知识库语义检索（RAG）、网页抓取等） |
 | 知识库（RAG） | 知识库文档经「段落分块 + Embedding 向量化」异步索引后，AI 可通过 `SearchKnowledgeBase` 工具做语义检索，回答平台业务规则、产品说明、操作指南等知识类问题；知识库管理见「AI 知识库」接口章节 |
 | 工具审批 | 敏感操作（如调整用户余额、VIP 延期、重置密码等）需管理员二次审批后继续执行 |
 | 对话历史 | 按会话（Conversation）保存对话记录，支持查看历史会话、删除会话 |
@@ -61,6 +61,7 @@ AI 助手与后台 RBAC（`spatie/laravel-permission`）深度集成，采用三
 | Settings | GetSetting | 获取系统设置 | `settings.index` |
 | Settings | SetSetting | 设置系统配置值（需审批） | `settings.edit` |
 | Stats | GetDashboardStats | 获取仪表盘统计数据 | `chat.use` |
+| Stats | GetUserGrowthStats | 用户增长/活跃/留存趋势分析 | `users.index` |
 | System | AddSensitiveWord | 新增敏感词（需审批） | `sensitive-words.create` |
 | System | GetAreas | 查询地区数据 | `areas.index` |
 | System | ListAdmins | 查询后台管理员列表 | `admins.index` |
@@ -73,6 +74,7 @@ AI 助手与后台 RBAC（`spatie/laravel-permission`）深度集成，采用三
 | System | SystemInfo | 获取系统信息 | `chat.use` |
 | Tasks | ListTaskLogs | 查询任务奖励发放日志 | `task-logs.index` |
 | Tasks | ListTasks | 查询任务定义列表 | `tasks.index` |
+| Users | GetChurnRiskUsers | 流失风险用户名单（沉默时长 + 历史活跃度规则） | `users.index` |
 | Users | GetUser | 获取用户详情 | `users.index` |
 | Users | ListIdentityVerifications | 查询实名认证记录 | `identity-verifications.index` |
 | Users | ListInviteRecords | 查询用户邀请关系记录 | `invite-records.index` |
@@ -85,6 +87,9 @@ AI 助手与后台 RBAC（`spatie/laravel-permission`）深度集成，采用三
 | Users | ReviewIdentityVerification | 审核实名认证（需审批） | `identity-verifications.edit` |
 | Users | SendUserNotification | 向用户发送站内通知（需审批） | `users.edit` |
 | Users | SetUserStatus | 设置用户状态（需审批） | `users.edit` |
+| Wallet | DetectWithdrawAnomalies | 提现异常扫描（大额聚集/短时密集/新注册即提/共享账户/共享 IP） | `wallet.withdraws` |
+| Wallet | GetFinanceTrends | 财务趋势按日聚合与环比 | `wallet.index` 或 `wallet.orders` 或 `wallet.withdraws`（任一） |
+| Wallet | GetRechargeFunnel | 充值转化漏斗与分渠道成功率 | `wallet.orders` |
 | Wallet | ListRecharges | 查询充值订单 | `wallet.orders` |
 | Wallet | ListWalletTrades | 查询钱包流水 | `wallet.index` |
 | Wallet | ListWithdraws | 查询提现申请 | `wallet.withdraws` |
@@ -120,7 +125,7 @@ AI 能力统一由 `laravel/ai` 驱动，提供方在 `config/ai.php` 配置：
 | 代理 | 用途 | 运行配置 |
 |------|------|---------|
 | `Assistant` | 后台 AI 助手（SSE 流式对话 + 工具调用） | `MaxSteps(12)`、`Temperature(0.3)`、`Timeout(300)` |
-| `Finance` | 财务分析对话（财务数据查询与解读） | `MaxSteps(12)`、`Temperature(0.1)`、`Timeout(300)` |
+| `Finance` | 财务分析对话（财务数据查询、趋势环比、提现风控扫描与解读） | `MaxSteps(12)`、`Temperature(0.1)`、`Timeout(300)` |
 | `Copywriter` | 运营文案生成（公告 / Banner，JSON 结构输出） | `Temperature(0.7)`、`Timeout(300)` |
 | `ContentReviewer` | 内容审核辅助（评论复核 / 举报初判 / 反馈草拟） | `Temperature(0.2)`、`Timeout(300)` |
 | `WechatAssistant` | 公众号智能客服（基于公开知识库问答） | `MaxSteps(4)`、`Temperature(0.4)`、`Timeout(300)` |
