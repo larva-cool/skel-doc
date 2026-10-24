@@ -47,7 +47,19 @@ export default defineConfig({
           '基于 Laravel 13.x + DDD 架构的开箱即用后台管理解决方案：双端认证、RBAC 权限、AI 助手、知识库 RAG 与多模态生成。'
       }
     ],
-    ['meta', { name: 'twitter:url', content: 'https://www.aiforge.cn/' }]
+    ['meta', { name: 'twitter:url', content: 'https://www.aiforge.cn/' }],
+    // 百度统计
+    [
+      'script',
+      {},
+      `var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?3422cff905b3d10cf2c3339337de7803";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();`
+    ]
   ],
 
   themeConfig: {
