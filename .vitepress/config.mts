@@ -95,7 +95,8 @@ export default defineConfig({
       { text: 'API 接口', link: '/api/response-format' },
       { text: '技术方案', link: '/technical-solutions/attachment-management' },
       { text: '运维与开发', link: '/operations/development-guide' },
-      { text: '路线图', link: '/roadmap/roadmap' }
+      { text: '路线图', link: '/roadmap/roadmap' },
+      { text: '商业授权', link: '/commercial-license' }
     ],
 
     sidebar: [
@@ -164,6 +165,10 @@ export default defineConfig({
           { text: 'Roadmap 路线图', link: '/roadmap/roadmap' },
           { text: '附录', link: '/roadmap/appendix' }
         ]
+      },
+      {
+        text: '商业授权',
+        items: [{ text: '商业授权', link: '/commercial-license' }]
       }
     ],
 
