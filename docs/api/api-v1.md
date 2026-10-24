@@ -231,13 +231,51 @@
 }
 ```
 
-### 已封装工具（Phase 1）
+### 已封装工具（35 个，只读）
 
-| 工具名 | 说明 | 入参 |
-|--------|------|------|
-| `user.profile.get` | 当前用户基本资料（账号、昵称、头像、积分、金币、会员状态） | 无 |
-| `wallet.overview.get` | 钱包概览（余额、冻结、可用、累计收支） | 无 |
-| `common.banner.list` | 指定广告位当前生效的 Banner 列表 | `position`（必填，广告位编码） |
+| 域 | 工具名 | 说明 | 入参 |
+|--------|------|------|------|
+| 用户 | `user.profile.get` | 基本资料（账号、昵称、头像、积分、金币、会员状态） | 无 |
+| 用户 | `user.login_histories.list` | 登录历史 | 分页 |
+| 用户 | `user.points.list` | 积分流水 | 分页 |
+| 用户 | `user.coins.list` | 金币流水 | 分页 |
+| 用户 | `user.socials.list` | 第三方账号绑定（openid/unionid 脱敏） | 分页 + `provider` |
+| 用户 | `user.visits.list` | 我的访问记录 | 分页 + `source_type` |
+| 通知 | `user.notifications.list` | 通知列表 | 分页 + `type` |
+| 通知 | `user.notifications.unread` | 未读通知列表 | 分页 + `type` |
+| 地址 | `user.address.list` | 收货地址列表 | 分页 |
+| 地址 | `user.address.get` | 地址详情（越权拦截） | `id` |
+| 反馈 | `user.feedback.list` | 我的反馈列表 | 分页 |
+| 举报 | `user.report.list` | 我的举报列表 | 分页 |
+| 实名 | `user.identity.get` | 最新一条实名认证记录 | 无 |
+| 实名 | `user.identity.status` | 实名认证简要状态 | 无 |
+| 钱包 | `wallet.overview.get` | 钱包概览（余额、冻结、累计收支） | 无 |
+| 钱包 | `wallet.trades.list` | 钱包流水 | 分页 + `type` / `start_date` / `end_date` |
+| 钱包 | `wallet.recharge.list` | 充值订单列表 | 分页 + `pay_status` |
+| 钱包 | `wallet.recharge.get` | 充值订单详情（越权拦截） | `id` |
+| 钱包 | `wallet.withdraw.list` | 提现申请列表 | 分页 + `status` |
+| 钱包 | `wallet.withdraw.get` | 提现详情（越权拦截） | `id` |
+| 钱包 | `wallet.withdraw_account.list` | 收款账户列表（默认排最前） | 分页 + `account_type` |
+| 内容互动 | `content.comment.list` | 已审核通过的公开评论列表 | 分页 + `source_type` / `source_id` |
+| 内容互动 | `content.collection.list` | 我的收藏列表 | 分页 + `source_type` |
+| 内容互动 | `content.like.list` | 我的点赞列表 | 分页 + `source_type` |
+| 内容互动 | `content.follow.list` | 我的关注列表 | 分页 + `source_type` |
+| 任务 | `task.list` | 任务中心（按分组返回，含当前用户进度） | 无 |
+| 邀请 | `invite.record.list` | 我的邀请记录 | 分页 |
+| 邀请 | `invite.stats.get` | 邀请统计（人数、是否有邀请人） | 无 |
+| 公开 | `common.banner.list` | 指定广告位生效中的 Banner | `position` |
+| 公开 | `common.area.list` | 地区列表（不传 `area_id` 返回省级） | `area_id`? |
+| 公开 | `common.dict_item.list` | 公开字典项（白名单内编码） | `code` |
+| 公开 | `common.announcement.list` | 已发布公告列表 | 分页 |
+| 公开 | `common.announcement.get` | 公告详情 | `id` |
+| 公开 | `common.agreement.get` | 最新已发布协议 | `category` |
+| 会话 | `auth.token.list` | 已签发的访问令牌列表 | 分页 |
+
+**统一约定**：
+
+- 「分页」入参为 `page`（默认 1）与 `per_page`（默认 15，1-100）；响应统一为 `{items: [...], pagination: {total, per_page, current_page, last_page, has_more}}`
+- 详情类工具在记录不存在或不属于当前用户时返回错误（`isError=true`），不会越权泄漏他人数据
+- 全部工具均带 `readOnlyHint` 与 `idempotentHint`，可由 AI 客户端安全缓存结果
 
 - 工具定义位于 `app/Mcp/Tools/`，Server 定义位于 `app/Mcp/Servers/ApiServer.php`
 - 调试：`php artisan mcp:inspector mcp/v1`
