@@ -231,7 +231,7 @@
 }
 ```
 
-### 已封装工具（53 个：35 只读 + 18 写操作）
+### 已封装工具（70 个：35 只读 + 35 写操作）
 
 | 域 | 工具名 | 说明 | 入参 |
 |--------|------|------|------|
@@ -289,17 +289,35 @@
 | 用户资料 | `user.phone.update` | 修改手机号（需短信验证码） | `phone` / `verify_code` |
 | 用户资料 | `user.avatar.update` | 修改头像（base64 编码图片，自动转 WebP） | `avatar_base64` / `extension` |
 | 用户资料 | `user.password.update` | 修改密码（需旧密码验证） | `old_password` / `password` |
+| 地址 | `user.address.create` | 添加收货地址 | `name` / `phone` / `province` / `city` / `district` / `address` / `country`? / `is_default`? / `zipcode`? |
+| 地址 | `user.address.update` | 修改收货地址 | `id` + 可选字段 |
+| 地址 | `user.address.delete` | 删除收货地址（软删除） | `id` |
+| 地址 | `user.address.set_default` | 设为默认地址 | `id` |
+| 反馈 | `user.feedback.create` | 提交用户反馈（敏感词过滤） | `title` / `content` / `type` / `images`? / `contact_name`? / `contact_info`? |
+| 举报 | `user.report.create` | 提交举报（同一对象未结案前不可重复） | `target_type` / `target_id` / `category` / `reason`? / `evidence`? |
+| 钱包 | `wallet.recharge.create` | 创建充值订单（destructive） | `amount` / `pay_channel` |
+| 钱包 | `wallet.withdraw.create` | 提交提现申请（destructive，冻结余额） | `amount` / `withdraw_account_id` |
+| 钱包 | `wallet.withdraw_account.create` | 添加收款账户（首个自动默认） | `account_type` / `real_name` / `account_no` / `bank_name`? / `bank_branch`? / `is_default`? |
+| 钱包 | `wallet.withdraw_account.update` | 修改收款账户 | `id` + 可选字段 |
+| 钱包 | `wallet.withdraw_account.delete` | 删除收款账户（destructive） | `id` |
+| 钱包 | `wallet.withdraw_account.set_default` | 设为默认收款账户 | `id` |
 | 任务 | `task.claim` | 领取任务奖励 | `task_id` / `period_key`? |
 | 通知 | `notification.mark_all_read` | 全部标记已读 | 无 |
 | 通知 | `notification.mark_read` | 标记指定通知已读 | `id` |
+| 通知 | `notification.clear_read` | 清空已读通知（不可恢复） | 无 |
 | 访问记录 | `visit.record` | 记录一次访问 | `source_type` / `source_id` |
+| 会话 | `auth.token.delete` | 撤销指定访问令牌 | `id` |
+| 会话 | `auth.logout` | 退出登录（当前令牌立即失效） | 无 |
+| 账户 | `user.delete` | 注销并删除账户（destructive，软删除） | 无 |
 
 **写操作统一约定**：
 
-- 涉及内容发布的工具（评论、资料介绍/签名）自动经过敏感词过滤
+- 涉及内容发布的工具（评论、资料介绍/签名、反馈、举报）自动经过敏感词过滤
 - 点赞/收藏/关注工具内置防重复校验，重复调用返回错误
 - 删除/详情工具仅能操作当前登录用户自己的数据，越权返回错误
 - `user.email.update` / `user.phone.update` 需先通过 `/api/v1/common/mail-captcha` 或 `/api/v1/common/sms-captcha` 获取验证码
+- 资金类（`wallet.recharge.create`、`wallet.withdraw.create`）与账户注销（`user.delete`）标记 `destructiveHint=true`，AI 客户端应在执行前向用户二次确认
+- `wallet.withdraw.create` 会冻结对应金额，需确保用户余额充足；同一用户仅允许一笔待审核提现
 
 **统一约定**：
 
