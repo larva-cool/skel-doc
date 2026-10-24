@@ -51,6 +51,7 @@ php artisan storage:link
 | Scheduler | Cron 每分钟执行 `php artisan schedule:run` |
 | Pulse | 访问控制保护（Gate 鉴权） |
 | Telescope | 生产环境禁用或仅限管理员访问 |
+| Meilisearch | 可选，知识库向量检索引擎（`KNOWLEDGE_ENGINE=meilisearch` 时启用；配置 `MEILISEARCH_HOST/KEY`，切换后执行一次 `php artisan knowledge:sync-index` 迁移存量分块） |
 
 ## 4. 备份策略
 
