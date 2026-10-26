@@ -10,6 +10,9 @@ export default defineConfig({
     'Ai Forge 企业级项目套件：基于 Laravel 13.x + DDD 架构的开箱即用后台管理解决方案，内置双端认证、RBAC 权限、钱包、任务、用户分群，集成 AI 助手、知识库 RAG 与多模态生成，配套 Vue 3 管理后台与完整技术文档。',
   lastUpdated: true,
   cleanUrls: true,
+  sitemap: {
+    hostname: 'https://www.aiforge.cn'
+  },
 
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
