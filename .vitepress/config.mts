@@ -172,7 +172,7 @@ export default defineConfig({
       }
     ],
 
-    socialLinks: [{ icon: 'github', link: 'https://github.com/' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/larva-cool/laravel-skel-forge' }],
 
     outline: {
       level: [2, 3],
